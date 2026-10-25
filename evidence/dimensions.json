@@ -4,20 +4,24 @@
     80.0,
     21.0
   ],
-  "clearance_per_face_mm": 0.2,
+  "clearance_per_face_mm": 0.0,
   "joint_y_mm": [
     28.0,
     56.0
   ],
-  "root_width_mm": 11.2,
-  "head_width_mm": 14,
-  "projection_mm": 6,
-  "tip_height_mm": 5,
+  "socket_offset_per_face_mm": 0.2,
+  "male_expansion_per_face_mm": 0.2,
+  "compression_interference_per_flank_mm": 0.1,
+  "plain_insertion_path_max_overlap_mm3": 2.2508661601250424e-12,
+  "root_width_mm": 11.6,
+  "head_width_mm": 14.6472136,
+  "projection_mm": 6.2,
+  "tip_height_mm": 4.8,
   "root_stop_height_mm": 10,
-  "insertion_path_max_overlap_mm3": 1.4671705690638692e-12,
+  "insertion_path_max_overlap_mm3": 1.162441117610361,
   "blocked_motion_overlap_mm3": {
-    "separate_x_1mm": 25.377750168695346,
-    "below_stop_0p2mm": 4.685333333514645
+    "separate_x_1mm": 51.70651605405561,
+    "below_stop_0p2mm": 6.044102610139351
   },
   "plate_bounds": [
     [
@@ -26,7 +30,7 @@
       0.0
     ],
     [
-      173.5,
+      173.7,
       201.89454581774316,
       20.8585259208321
     ]

@@ -1,10 +1,12 @@
 """Render installed and exploded geometry with Blender, not generated artwork."""
 from pathlib import Path
 import json
+import sys
 import bpy
 from mathutils import Vector
 
-ROOT = Path(__file__).resolve().parent / 'rib-2.4'
+ROOT = Path(__file__).resolve().parent / (sys.argv[sys.argv.index('--')+1]
+                                        if '--' in sys.argv else 'rib-2.4')
 bpy.ops.object.select_all(action='SELECT')
 bpy.ops.object.delete(use_global=False)
 parts = []
@@ -87,3 +89,10 @@ cam.rotation_euler = (Vector((147.5,40,0))-cam.location).to_track_quat('-Z','Y')
 cam.data.ortho_scale = 340
 scene.render.filepath = str(ROOT / 'pad-sites.png')
 bpy.ops.render.render(write_still=True)
+if '-compression-' in ROOT.name:
+    parts[1].hide_render = True
+    cam.location = (174, 2, -16)
+    cam.rotation_euler = (Vector((151,28,3))-cam.location).to_track_quat('-Z','Y').to_euler()
+    cam.data.ortho_scale = 19
+    scene.render.filepath = str(ROOT / 'compression-detail.png')
+    bpy.ops.render.render(write_still=True)

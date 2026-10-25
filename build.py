@@ -13,13 +13,28 @@ import manifold3d as md
 
 parser = argparse.ArgumentParser()
 parser.add_argument('rib', type=float, choices=(1.91, 2.1, 2.25, 2.4))
-RIB = parser.parse_args().rib
+parser.add_argument('--compression', type=float, choices=(0., .05, .10),
+                    help='Experimental local interference per flank in mm; omit for v9.')
+parser.add_argument('--clearance', type=float, choices=(0., .20), default=.20,
+                    help='Base socket clearance per face in mm; default preserves v9.')
+parser.add_argument('--male-expansion', type=float, choices=(0., .20), default=0.,
+                    help='Expand male mating faces to reuse the original receiver.')
+args = parser.parse_args()
+if args.male_expansion > args.clearance:
+    parser.error('Male expansion must not exceed socket clearance; use compression ribs for interference.')
+RIB = args.rib
 PATTERN = f'rib-{RIB:g}'
+if args.clearance != .20:
+    PATTERN += f'-clearance-{args.clearance:.2f}'
+if args.male_expansion:
+    PATTERN += f'-male-expanded-{args.male_expansion:.2f}'
+if args.compression is not None:
+    PATTERN += f'-compression-{args.compression:.2f}'
 ROOT = Path(__file__).resolve().parent / PATTERN
 ROOT.mkdir(exist_ok=True)
 WIDTH, DEPTH, HEIGHT, HALF = 295., 80., 21., 147.5
 JOINT_Y = (28., 56.)
-CLEARANCE = .20  # Per mating face, not diametral; sliding, not press fit.
+CLEARANCE = args.clearance  # Per mating face, not diametral.
 ROW = 10 / np.sqrt(3)
 
 def top(y):
@@ -126,17 +141,39 @@ profile = md.CrossSection([[[-2,-5.6],[0,-5.6],[1.6,-4.8],[6,-7],
                            [6,7],[1.6,4.8],[0,5.6],[-2,5.6]]])
 # Flat 1mm-wide root landing at Z=10 is the insertion stop. Beyond it, the
 # top slopes 45 degrees down to Z=5 at the tip, avoiding a 6mm cantilever.
-ramp = hull([[x, y, z] for x, ztop in [(-2, 10), (1, 10), (6, 5)]
+ramp = hull([[x, y, z] for x, ztop in [(-2-args.male_expansion, 10), (1, 10),
+                                      (6+args.male_expansion, 5-args.male_expansion)]
              for y in (-8, 8) for z in (0, ztop)])
-tongue = profile.extrude(10) ^ ramp
+male_profile = profile.offset(args.male_expansion, join_type=md.JoinType.Miter)
+tongue = male_profile.extrude(10) ^ ramp
 # Bottom-open sockets let the right body descend over the stationary tongues.
 # A flat roof at Z=10 meets only the horizontal root landing, not the ramp.
 slot = profile.offset(CLEARANCE, join_type=md.JoinType.Miter).extrude(11).translate([0, 0, -1])
-# Flared bottom 0.6 mm guides insertion; clearance above it stays 0.20 mm.
+# Flared bottom 0.6 mm guides insertion; nominal clearance applies above it.
 entry = profile.offset(CLEARANCE, join_type=md.JoinType.Miter).scale([1.06,1.06])
 slot += entry.extrude(.6, scale_top=[1/1.06,1/1.06])
+# Local rounded ribs on opposing retaining flanks, not the entire fit surface.
+# One-millimetre lead-ins at both ends; all rib material stays below the ramp.
+compression_ribs = md.Manifold()
+if args.compression is not None:
+    for side in (-1, 1):
+        tangent = np.array([2., side]) / np.sqrt(5)
+        normal = np.array([-1., 2.*side]) / np.sqrt(5)
+        center = np.array([3.8, side*5.9]) + normal*args.male_expansion
+        points = []
+        rib_height = CLEARANCE-args.male_expansion+args.compression
+        for z, height in ((1., 0.), (2., rib_height),
+                          (4., rib_height), (5., 0.)):
+            for a in np.linspace(0, np.pi, 25):
+                xy = center + tangent*(.6*np.cos(a)) + normal*(height*np.sin(a))
+                points.append([*xy, z])
+            for u in (-.6, .6):
+                points.append([*(center + tangent*u - normal*.12), z])
+        compression_ribs += hull(points)
+plain_left = left
 for y in JOINT_Y:
-    left += tongue.translate([HALF, y, 0])
+    plain_left += tongue.translate([HALF, y, 0])
+    left += (tongue + compression_ribs).translate([HALF, y, 0])
     right -= slot.translate([HALF, y, 0])
 installed = [save('left-installed', left), save('right-installed', right)]
 trimesh.Scene(installed).export(ROOT / 'assembly.glb')
@@ -186,6 +223,9 @@ def plate_file(name, objects):
     return combined.bounds.tolist()
 
 bounds = plate_file('rule60-one-plate', plate)
+if args.male_expansion:
+    plate_file('replacement-left', [plate[0]])
+    plate_file('replacement-test-left', [test[0]])
 plate_file('test-joint-plate', test)
 # Small feel/adhesion/pad-placement sample; not a full-width stiffness test.
 sample = left ^ md.Manifold.cube([45,35,HEIGHT+1]).translate([15,0,0])
@@ -198,14 +238,26 @@ plate_file('surface-pad-sample', [sample.translate([20,20,0])])
 # Validate the actual rigid-body assembly path, not only the seated position.
 path = {str(float(d)): (left ^ right.translate([0,0,float(d)])).volume()
         for d in np.linspace(0, 22, 89)}
-assert max(path.values()) < .001, path
+plain_path = [(plain_left ^ right.translate([0,0,float(d)])).volume()
+              for d in np.linspace(0, 22, 89)]
+assert max(plain_path) < .001, plain_path
+if args.compression is None or args.compression == 0:
+    assert max(path.values()) < .001, path
+else:
+    assert path['0.0'] > .001, path
 blocked = {'separate_x_1mm': (left ^ right.translate([1,0,0])).volume(),
            'below_stop_0p2mm': (left ^ right.translate([0,0,-.2])).volume()}
 assert min(blocked.values()) > .1, blocked
 report = {'assembled_dimensions': trimesh.util.concatenate(installed).extents.tolist(),
-          'clearance_per_face_mm': CLEARANCE, 'joint_y_mm': JOINT_Y,
-          'root_width_mm':11.2, 'head_width_mm':14, 'projection_mm':6,
-          'tip_height_mm':5, 'root_stop_height_mm':10,
+          'clearance_per_face_mm': CLEARANCE-args.male_expansion, 'joint_y_mm': JOINT_Y,
+          'socket_offset_per_face_mm': CLEARANCE,
+          'male_expansion_per_face_mm': args.male_expansion,
+          'compression_interference_per_flank_mm': args.compression,
+          'plain_insertion_path_max_overlap_mm3': max(plain_path),
+          'root_width_mm':11.2+2*args.male_expansion,
+          'head_width_mm':float(male_profile.bounds()[3]-male_profile.bounds()[1]),
+          'projection_mm':6+args.male_expansion,
+          'tip_height_mm':5-args.male_expansion, 'root_stop_height_mm':10,
           'insertion_path_max_overlap_mm3':max(path.values()),
           'blocked_motion_overlap_mm3':blocked, 'plate_bounds':bounds}
 assert np.allclose(report['assembled_dimensions'], [295,80,21])
