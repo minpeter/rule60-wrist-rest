@@ -4,7 +4,7 @@ A code-generated two-piece wrist rest by [minpeter](https://github.com/minpeter)
 The halves slide together using integral dovetails: no screws, magnets or
 separate connectors. Optional adhesive anti-slip pads are not included.
 
-![Assembled v9 CAD render](images/assembled.png)
+![V9 dovetail joint detail](images/joint-underside.png)
 
 ## Download and print
 
