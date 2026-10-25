@@ -4,6 +4,8 @@ A code-generated two-piece wrist rest by [minpeter](https://github.com/minpeter)
 The halves slide together using integral dovetails: no screws, magnets or
 separate connectors. Optional adhesive anti-slip pads are not included.
 
+[View on MakerWorld](https://makerworld.com/en/models/3490864-rule-60-v3-honeycomb-wrist-rest#profileId-3986872)
+
 ![V9 dovetail joint detail](images/joint-underside.png)
 
 ## Download and print
