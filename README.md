@@ -87,6 +87,7 @@ uv run build.py 2.4 --male-expansion 0.20
 # Current published fit:
 uv run build.py 2.4 --male-expansion 0.20 --compression 0.10
 uv run verify.py rib-2.4-male-expanded-0.20-compression-0.10
+uv run export.py
 ```
 
 `build.py` constructs the geometry in code and reads no external STL or 3MF.
@@ -94,6 +95,11 @@ Outputs are in the ignored `rib-2.4-male-expanded-0.20-compression-0.10/`
 directory. `rule60-one-plate.3mf`, `replacement-left.3mf`,
 `replacement-test-left.3mf` and `test-joint-plate.3mf` correspond to the
 downloads above. STL exports use millimetres.
+
+`export.py` refreshes `models/` and the verification evidence. Published STLs
+are binary: export removes triangles that collapse at float32 precision, then
+checks closed meshes, component counts, dimensions and volume after reload.
+This avoids degenerate faces when MakerWorld converts ASCII STL downloads.
 
 The default command without fit options intentionally reproduces the original
 looser v9. `--male-expansion 0.20` without `--compression` provides a no-rib
