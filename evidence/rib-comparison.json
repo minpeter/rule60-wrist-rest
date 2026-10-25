@@ -1,0 +1,70 @@
+{
+  "1.91": {
+    "body": {
+      "seconds": 11063.779296875,
+      "grams": 68.66654968261719,
+      "gap_infill_seconds": 1583.3602294921875,
+      "ZFiller": 0
+    },
+    "test": {
+      "seconds": 2346.099609375,
+      "grams": 10.942559242248535,
+      "gap_infill_seconds": 96.90721893310547,
+      "ZFiller": 1
+    },
+    "surface": {
+      "seconds": 1442.3638916015625,
+      "grams": 3.3330392837524414,
+      "gap_infill_seconds": 160.69334411621094,
+      "ZFiller": 0
+    }
+  },
+  "2.1": {
+    "body": {
+      "seconds": 11204.6259765625,
+      "grams": 70.9704818725586,
+      "gap_infill_seconds": 1675.599853515625,
+      "ZFiller": 0
+    },
+    "test": {
+      "seconds": 2376.646484375,
+      "grams": 11.098243713378906,
+      "gap_infill_seconds": 97.97359466552734,
+      "ZFiller": 1
+    }
+  },
+  "2.25": {
+    "body": {
+      "seconds": 11545.9326171875,
+      "grams": 73.08032989501953,
+      "gap_infill_seconds": 1106.916748046875,
+      "ZFiller": 0
+    },
+    "test": {
+      "seconds": 2403.6650390625,
+      "grams": 11.194689750671387,
+      "gap_infill_seconds": 56.79032516479492,
+      "ZFiller": 1
+    }
+  },
+  "2.4": {
+    "body": {
+      "seconds": 11073.166015625,
+      "grams": 74.0605239868164,
+      "gap_infill_seconds": 698.2761840820312,
+      "ZFiller": 0
+    },
+    "test": {
+      "seconds": 2355.11962890625,
+      "grams": 11.292740821838379,
+      "gap_infill_seconds": 37.22879409790039,
+      "ZFiller": 1
+    },
+    "surface": {
+      "seconds": 1459.799072265625,
+      "grams": 3.6649765968322754,
+      "gap_infill_seconds": 111.54176330566406,
+      "ZFiller": 0
+    }
+  }
+}

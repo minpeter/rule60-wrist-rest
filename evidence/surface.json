@@ -1,0 +1,7 @@
+{
+  "pattern": "rib-2.4",
+  "rib_width_mm": 2.4,
+  "opening_radius_mm": 3.114359353944898,
+  "skin_thickness_mm": 2.2,
+  "aperture_edge_bevel_mm": 0.2
+}

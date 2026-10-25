@@ -1,0 +1,34 @@
+{
+  "assembled_dimensions": [
+    295.0,
+    80.0,
+    21.0
+  ],
+  "clearance_per_face_mm": 0.2,
+  "joint_y_mm": [
+    28.0,
+    56.0
+  ],
+  "root_width_mm": 11.2,
+  "head_width_mm": 14,
+  "projection_mm": 6,
+  "tip_height_mm": 5,
+  "root_stop_height_mm": 10,
+  "insertion_path_max_overlap_mm3": 1.4671705690638692e-12,
+  "blocked_motion_overlap_mm3": {
+    "separate_x_1mm": 25.377750168695346,
+    "below_stop_0p2mm": 4.685333333514645
+  },
+  "plate_bounds": [
+    [
+      20.0,
+      20.0,
+      0.0
+    ],
+    [
+      173.5,
+      201.89454581774316,
+      20.8585259208321
+    ]
+  ]
+}
