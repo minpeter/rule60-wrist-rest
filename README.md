@@ -145,11 +145,19 @@ and four ball-catch strike plates. The case outline and Z levels follow the
 owner's caliper measurements of the stock top case; the gasket-cap and
 ball-catch pockets follow photo metrology of the same part.
 
-![Exploded view of the two top-case halves](images/topcase-exploded.png)
+| Assembled | Top |
+| --- | --- |
+| ![Assembled top case with wrist rest](images/topcase-assembled.png) | ![Top view](images/topcase-top.png) |
+| **Exploded** | **Underside** |
+| ![Exploded view of the two halves](images/topcase-exploded.png) | ![Underside: pockets, strikes and joints](images/topcase-underside.png) |
+
+Renders are CAD illustrations (left half grey, right half blue), not print
+photos.
 
 **Status: not yet test-fitted as a full print.** An earlier corner coupon
-confirmed joint positions, ball-catch engagement and screw-hole size; the
-outline and Z levels were re-measured after that test.
+([photos](evidence/topcase/README.md#photos)) confirmed joint positions,
+ball-catch engagement and screw-hole size; the outline and Z levels were
+re-measured after that test.
 
 | File | Use |
 | --- | --- |
@@ -203,6 +211,13 @@ uv run export_topcase.py
 Outputs go to the ignored `topcase-draft/`; `export_topcase.py` copies the
 downloads, STEP, [report](evidence/topcase-report.json),
 [verification](evidence/topcase-verification.json) and renders.
+
+### Measurements and evidence
+
+[evidence/topcase/](evidence/topcase/README.md) lists every caliper value with
+its photo or source and the design constant it sets, the photo-derived values
+and their method, the measurement photos (metadata removed), the analysis
+images and the check outputs, including the as-printed re-check.
 
 ### Verification and limitations
 

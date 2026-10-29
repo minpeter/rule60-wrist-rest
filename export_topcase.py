@@ -22,6 +22,6 @@ for src, dst in [
 shutil.copyfile(source / 'rule60-hhkb-unibody-draft.step', ROOT / 'models' / 'rule60-hhkb-topcase.step')
 for src, dst in [('draft-report.json', 'topcase-report.json'), ('verification.json', 'topcase-verification.json')]:
     shutil.copyfile(source / src, ROOT / 'evidence' / dst)
-for src, dst in [('render-exploded.png', 'topcase-exploded.png'), ('render-underside.png', 'topcase-underside.png')]:
-    shutil.copyfile(source / src, ROOT / 'images' / dst)
+for view in ('assembled', 'top', 'exploded', 'underside'):
+    shutil.copyfile(source / f'render-{view}.png', ROOT / 'images' / f'topcase-{view}.png')
 print('Exported top-case downloads, CAD, evidence and renders.')
