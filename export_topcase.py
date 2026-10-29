@@ -22,6 +22,12 @@ for src, dst in [
 shutil.copyfile(source / 'rule60-hhkb-unibody-draft.step', ROOT / 'models' / 'rule60-hhkb-topcase.step')
 for src, dst in [('draft-report.json', 'topcase-report.json'), ('verification.json', 'topcase-verification.json')]:
     shutil.copyfile(source / src, ROOT / 'evidence' / dst)
-for view in ('assembled', 'top', 'exploded', 'underside'):
-    shutil.copyfile(source / f'render-{view}.png', ROOT / 'images' / f'topcase-{view}.png')
-print('Exported top-case downloads, CAD, evidence and renders.')
+# Renders come from the optional Blender step; publish them only when all four exist and postdate the build.
+renders = [source / f'render-{view}.png' for view in ('assembled', 'top', 'exploded', 'underside')]
+built_at = (source / 'render-meshes.json').stat().st_mtime
+if all(p.exists() and p.stat().st_mtime >= built_at for p in renders):
+    for p in renders:
+        shutil.copyfile(p, ROOT / 'images' / p.name.replace('render-', 'topcase-'))
+    print('Exported top-case downloads, CAD, evidence and renders.')
+else:
+    print('Exported top-case downloads, CAD and evidence; renders missing or older than the build, images/ unchanged.')
