@@ -52,7 +52,11 @@ The drawing is not redistributed.
 
 ## Photos
 
-Resized to 1600 px; all EXIF metadata, including location, removed.
+Original resolution and image data (decoded pixels identical to the camera
+files). All metadata removed losslessly: EXIF (location, time, camera,
+MakerNotes, thumbnail), XMP, JFIF and the embedded HDR gain-map image. Only
+the orientation flag and the colour profile are kept so the photos display
+upright and in their original colours.
 
 | Photos | Content |
 | --- | --- |
