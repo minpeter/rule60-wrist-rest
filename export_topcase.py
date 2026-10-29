@@ -1,0 +1,27 @@
+"""Publish the HHKB top case + wrist rest print files, CAD, evidence and renders from `topcase-draft/`."""
+from pathlib import Path
+import json
+import shutil
+import zipfile
+
+ROOT = Path(__file__).resolve().parent
+source = ROOT / 'topcase-draft'
+
+verification = json.loads((source / 'verification.json').read_text())
+assert verification['status'] == 'ALL_PASSED', verification['status']
+
+for src, dst in [
+    ('rule60-hhkb-left-plate.3mf', 'rule60-hhkb-topcase-left.3mf'),
+    ('rule60-hhkb-right-plate.3mf', 'rule60-hhkb-topcase-right.3mf'),
+    ('rule60-fit-test-coupons.3mf', 'rule60-hhkb-topcase-fit-coupons.3mf'),
+]:
+    # Each print 3MF carries the 0.10 mm layer range over the pocket floors.
+    with zipfile.ZipFile(source / src) as z:
+        assert 'Metadata/layer_config_ranges.xml' in z.namelist(), src
+    shutil.copyfile(source / src, ROOT / 'models' / dst)
+shutil.copyfile(source / 'rule60-hhkb-unibody-draft.step', ROOT / 'models' / 'rule60-hhkb-topcase.step')
+for src, dst in [('draft-report.json', 'topcase-report.json'), ('verification.json', 'topcase-verification.json')]:
+    shutil.copyfile(source / src, ROOT / 'evidence' / dst)
+for src, dst in [('render-exploded.png', 'topcase-exploded.png'), ('render-underside.png', 'topcase-underside.png')]:
+    shutil.copyfile(source / src, ROOT / 'images' / dst)
+print('Exported top-case downloads, CAD, evidence and renders.')

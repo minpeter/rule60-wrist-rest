@@ -6,6 +6,9 @@ separate connectors. Optional adhesive anti-slip pads are not included.
 
 [View on MakerWorld](https://makerworld.com/en/models/3490864-rule-60-v3-honeycomb-wrist-rest#profileId-3986872)
 
+Also in this repository: an experimental [HHKB top case with the wrist rest
+built in](#hhkb-top-case-with-integrated-wrist-rest-experimental).
+
 ![Dovetail joint detail; overview predates the small compression ribs](images/joint-underside.png)
 
 ## Download and print
@@ -134,13 +137,99 @@ renders was unavailable due to an image-upload quota.
 [Historical rib comparison](evidence/rib-comparison.json) covers the original
 v9 candidates, not the current tight-fit slicing estimate.
 
+## HHKB top case with integrated wrist rest (experimental)
+
+A replacement Rule 60 V3 **HHKB** top case with the honeycomb wrist rest built
+in. It reuses the stock bottom case, PC gasket plate, 12 silicone gasket caps
+and four ball-catch strike plates. The case outline and Z levels follow the
+owner's caliper measurements of the stock top case; the gasket-cap and
+ball-catch pockets follow photo metrology of the same part.
+
+![Exploded view of the two top-case halves](images/topcase-exploded.png)
+
+**Status: not yet test-fitted as a full print.** An earlier corner coupon
+confirmed joint positions, ball-catch engagement and screw-hole size; the
+outline and Z levels were re-measured after that test.
+
+| File | Use |
+| --- | --- |
+| [Left half — 3MF](models/rule60-hhkb-topcase-left.3mf) | 206 × 197 mm print, ~75 g |
+| [Right half — 3MF](models/rule60-hhkb-topcase-right.3mf) | 149 × 197 mm print, ~65 g |
+| [Fit coupons — 3MF](models/rule60-hhkb-topcase-fit-coupons.3mf) | Front-left corner, front joints and back seam |
+| [CAD — STEP](models/rule60-hhkb-topcase.step) | Both halves, for remixing |
+
+Assembled: **298.1 × 198.3 mm**, 20.01 mm case height. The halves split at the
+centre through the wrist rest and front bezel, joined by three sliding
+dovetails with compression ribs. The back bezel continues on the left half to
+the back-right ball-catch strike, whose stock plate bridges the back seam with
+one M2 screw in each half; a wedge key aligns that seam. Every joint side face
+is line-to-line (0 mm); the dovetail landings and the faces under each 45°
+print ramp keep a 0.20 mm vertical glue line. Use epoxy or gel cyanoacrylate.
+Strike-plate screws must not exceed **5.0 mm under the head** (1.45 mm plate +
+3.55 mm pilot).
+
+### Printing
+
+Print each half on its own plate in the supplied orientation, top face on the
+plate, without supports or brim. The owner's settings: X2D / 0.4 mm nozzle,
+Bambu PETG Translucent, 0.20 mm Standard, 3 walls, 15% infill, textured PEI,
+default 0.15 mm elephant-foot compensation. The textured plate forms the
+visible top surface.
+
+These 3MFs include a Bambu Studio / Orca **height-range modifier: 0.10 mm
+layers from Z 5.4 to 10.0 mm**. At 0.20 mm the 6.30 mm gasket-cap floor
+prints at 6.4 and the 9.69 mm bottom-case seat at 9.6, pinching the caps
+0.19 mm more; with the range they print at 6.3 and 9.7. Confirm the range in
+the object list after opening. Bambu Studio CLI estimates: left 4 h 14 min,
+right 3 h 46 min, coupons 1 h 48 min. The CLI slice reported ZFiller
+diagnostics.
+
+### Reproduce
+
+The build drives the SolidCraft v0.22.0 headless CLI
+(`~/.local/bin/solidcraft-cli`), which is not included. The checks need the
+`6095(gas)` plate outline from `rule60-v3.dwg` in
+[minjunkim0205/Hobby-CustomKeyboard](https://github.com/minjunkim0205/Hobby-CustomKeyboard/tree/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60),
+converted to JSON with [`@mlightcad/libredwg-web`](https://www.npmjs.com/package/@mlightcad/libredwg-web);
+the drawing is not redistributed here.
+
+```sh
+uv run build_topcase_draft.py
+RULE60_DWG_JSON=/path/to/rule60-v3.json uv run verify_topcase.py
+blender -b -P render_topcase_draft.py   # optional renders
+uv run export_topcase.py
+```
+
+Outputs go to the ignored `topcase-draft/`; `export_topcase.py` copies the
+downloads, STEP, [report](evidence/topcase-report.json),
+[verification](evidence/topcase-verification.json) and renders.
+
+### Verification and limitations
+
+The verification checks closed single-shell exports, a 91-step insertion
+path with contact only on the compression ribs, 0 mm side faces and 0.20 mm
+glue lines, the back-seam strike screws, layer islands and flat overhangs, and
+virtual stock parts: the DWG plate through 0.25 mm upward flex, 12 caps,
+four strikes, 60 HHKB keycaps through full travel and the stock bottom-case
+pocket. The same checks also pass on both halves rebuilt at the printed layer
+heights, with the strikes seated on their 5.6 mm printed floor.
+
+Not covered: the stock bottom case was not measured (its pocket copies the
+stock top case); the front ball-catch strikes are centred in the available
+band, not measured; cap size is photo-derived and the front caps clear their
+pocket wall by only 0.08 mm; the stock plate is assumed to match the DWG.
+Clearance to the plate (0.30 mm per side) and keycaps (0.32 mm) tolerates up
+to about 0.2% print shrinkage.
+
 ## License and design history
 
 Copyright 2026 minpeter. The authored source, model exports, documentation and
 renders are released under **[CC BY 4.0](LICENSE)**. Attribute this project,
 link to the license and identify your changes. Commercial use is permitted.
 Third-party tools retain their own licenses. No affiliation with keyboard or
-printer manufacturers is implied.
+printer manufacturers is implied. The Rule 60 V3 is designed by INKC STUDIO;
+the top case is an independent re-creation from measurements of the owner's
+stock part and is not an official file.
 
 Early experiments took inspiration from [Shanhj's palm rest](https://makerworld.com/en/models/1326999).
 The final v9 generator constructs its geometry in code and embeds neither
