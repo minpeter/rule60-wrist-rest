@@ -154,11 +154,14 @@ ball-catch pockets follow photo metrology of the same part.
 Renders are CAD illustrations (left half grey, right half blue), not print
 photos.
 
-**Status: test-fitted in print.** The owner's v7.3 print assembled on the
-stock bottom case, plate and gaskets after the USB-C notch was cut about 3 mm
-deeper by hand; v7.4 makes that change in the model (the left half is
-unchanged from v7.3). The v7.4 right half, the only part that changed, has
-since been printed with no major issues reported. Fixes found by printing:
+**Status: test-fitted in print.** The owner's v7.4 print (both halves)
+assembles on the stock bottom case, plate and gaskets, and the joints fit well.
+On the desk the wrist rest sits slightly high and creaks when pressed, most
+likely because the stock bottom-case feet hold the keyboard about 2 mm above
+the desk (estimated, not measured) while the model puts the wrist-rest
+underside level with the top-case lip. Bumpons under the wrist rest fill that
+gap; v7.5 enlarges their pads and has not been printed yet. Fixes found by
+printing:
 
 - **v7.0:** v6.2 and earlier printed the mirror image: the DWG plate frame is a
   top view, the print frame the underside. The USB-C notch came out on the
@@ -169,12 +172,16 @@ since been printed with no major issues reported. Fixes found by printing:
   concentric with them; USB-C notch 12.8 mm wide with R1.5 corners, from the
   stock notch photographed against the print.
 - **v7.4:** USB-C notch 8.7 mm deep from the lip.
+- **v7.5:** the eight bumpon pads under the wrist rest run 11 mm instead of
+  6 mm in from the front face and the junction wall, so a 3M SJ5302 bumpon
+  (Ø7.9 mm) sits wholly on its pad instead of hanging ~1 mm past the front
+  face. Past 6 mm each pad is a 45° corbel (no supports).
 
 [Fit photos](evidence/topcase/README.md#photos) are in the evidence folder.
 
 | File | Use |
 | --- | --- |
-| [Left half — 3MF](models/rule60-hhkb-topcase-left.3mf) | 206 × 197 mm print, ~75 g |
+| [Left half — 3MF](models/rule60-hhkb-topcase-left.3mf) | 206 × 197 mm print, ~76 g |
 | [Right half — 3MF](models/rule60-hhkb-topcase-right.3mf) | 149 × 197 mm print, ~65 g |
 | [Fit coupons — 3MF](models/rule60-hhkb-topcase-fit-coupons.3mf) | Front-left corner, front joints and back seam |
 | [CAD — STEP](models/rule60-hhkb-topcase.step) | Both halves, for remixing |
@@ -190,6 +197,11 @@ print ramp keep a 0.20 mm vertical glue line. Use epoxy or gel cyanoacrylate.
 Strike-plate screws must not exceed **5.0 mm under the head** (1.45 mm plate +
 3.55 mm pilot).
 
+**Bumpons:** stick one clear 3M Bumpon SJ5302 (Ø7.9 × 2.2 mm) in the middle
+of each of the eight flat pads under the wrist rest, four along the front edge
+and four along the keyboard junction. Measure the gap under the assembled
+wrist rest first: 2.2 mm bumpons suit a gap of about 2.0–2.4 mm.
+
 ### Printing
 
 Print each half on its own plate in the supplied orientation, top face on the
@@ -202,9 +214,9 @@ These 3MFs include a Bambu Studio / Orca **height-range modifier: 0.10 mm
 layers from Z 5.4 to 10.0 mm**. At 0.20 mm the 6.30 mm gasket-cap floor
 prints at 6.4 and the 9.69 mm bottom-case seat at 9.6, pinching the caps
 0.19 mm more; with the range they print at 6.3 and 9.7. Confirm the range in
-the object list after opening. Bambu Studio CLI estimates (v7.4): left
-4 h 15 min / 75 g, right 3 h 47 min / 65 g, coupons 1 h 47 min / 33 g. The CLI
-slice reported ZFiller diagnostics.
+the object list after opening. Bambu Studio CLI estimates (v7.5): left
+4 h 17 min / 76 g, right 3 h 49 min / 65 g; coupons (unchanged since v7.4)
+1 h 47 min / 33 g. The CLI slice reported ZFiller diagnostics.
 
 ### Reproduce
 
@@ -240,8 +252,10 @@ path with contact only on the compression ribs, 0 mm side faces and 0.20 mm
 glue lines, the back-seam strike screws, layer islands and flat overhangs, and
 virtual stock parts: the DWG plate through 0.25 mm upward flex, 12 caps,
 four strikes, 60 HHKB keycaps through full travel and the stock bottom-case
-pocket, and the USB-C notch side, width and depth. Rebuilt at the printed
-layer heights, the same checks pass except one: the wedge-key tip's top
+pocket, the USB-C notch side, width and depth, and an Ø8.4 mm bumpon
+(SJ5302 at its +0.5 mm tolerance) lying flat on each of the eight wrist-rest
+pads. The v7.4 halves, rebuilt at the printed
+layer heights, passed the same checks except one: the wedge-key tip's top
 0.10 mm layer reaches 0.05 mm into the notch layer below it, so the key tip
 bears after ~0.15 mm of the 0.20 mm vertical glue line instead of 0.20 mm
 ([as-printed check](evidence/topcase/checks/as-printed-check.json)).

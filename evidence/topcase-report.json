@@ -1,5 +1,5 @@
 {
-  "version": "v7.4-usb-notch-8p7",
+  "version": "v7.5-bumpon-pads-11mm",
   "generator": "SolidCraft v0.22.0 parametric timeline + 28px/mm gasket metrology",
   "solidcraft_design": "topcase-draft/rule60-hhkb-unibody-draft.solidcraft",
   "step_export": "topcase-draft/rule60-hhkb-unibody-draft.step",
@@ -4100,14 +4100,59 @@
         "z_stop": 4.0,
         "z_top": 17.6
       }
-    ]
+    ],
+    "bumpon_pads": {
+      "bumpon": "3M Bumpon SJ5302",
+      "bumpon_diameter": 7.9,
+      "bumpon_diameter_max": 8.4,
+      "pad_w": 14.0,
+      "pad_d": 11.0,
+      "column_d": 6.0,
+      "tip_land": 1.0,
+      "centres_world": [
+        [
+          -30.0,
+          5.5
+        ],
+        [
+          30.0,
+          5.5
+        ],
+        [
+          -119.0,
+          5.5
+        ],
+        [
+          119.0,
+          5.5
+        ],
+        [
+          -30.0,
+          74.5
+        ],
+        [
+          30.0,
+          74.5
+        ],
+        [
+          -119.0,
+          74.5
+        ],
+        [
+          119.0,
+          74.5
+        ]
+      ],
+      "desk_plane_zp_at_y0": 11.711881852811848,
+      "desk_plane_tilt_deg": 6.0
+    }
   },
   "bodies": [
     {
       "name": "RightHalf",
-      "volume_mm3": 78625.14,
-      "mass_petg_g": 99.9,
-      "faces": 1566,
+      "volume_mm3": 79605.14,
+      "mass_petg_g": 101.1,
+      "faces": 1574,
       "print_plate_bounds_mm": [
         [
           53.47,
@@ -4115,7 +4160,7 @@
           0.0
         ],
         [
-          202.53,
+          202.52,
           226.68,
           20.12
         ]
@@ -4123,9 +4168,9 @@
     },
     {
       "name": "LeftHalf",
-      "volume_mm3": 90455.29,
-      "mass_petg_g": 114.9,
-      "faces": 1710,
+      "volume_mm3": 91435.29,
+      "mass_petg_g": 116.1,
+      "faces": 1718,
       "print_plate_bounds_mm": [
         [
           25.15,
