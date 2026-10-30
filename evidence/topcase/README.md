@@ -34,7 +34,7 @@ increasing toward the skirt lip.
 | v6.2 | Stock USB-C notch smaller with rounded corners ([0378](photos/IMG_0378.jpg), [0379](photos/IMG_0379.jpg): stock top case lip-to-lip on the print) | v7.2: 12.8 wide, R1.5 closed-end corners; width scaled from the printed 14.2 mm notch (stock 12.6 / 12.75) |
 | — | Outer corners looked too round against R2.0 inside (owner request) | v7.3: outer R8.0 → R4.85, concentric (uniform 2.85 mm wall) |
 | v7.3 | Assembles; USB-C connector hit the notch until it was cut ~3 mm deeper by hand | v7.4: notch 5.7 → 8.7 mm deep from the lip; left half unchanged |
-| v7.4 | One half printed; no major issues reported | — |
+| v7.4 | Right half (the only changed part) printed; no major issues reported | — |
 
 Readings not used:
 

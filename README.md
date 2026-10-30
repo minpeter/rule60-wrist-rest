@@ -157,8 +157,8 @@ photos.
 **Status: test-fitted in print.** The owner's v7.3 print assembled on the
 stock bottom case, plate and gaskets after the USB-C notch was cut about 3 mm
 deeper by hand; v7.4 makes that change in the model (the left half is
-unchanged from v7.3). One v7.4 half has since been printed with no major
-issues reported. Fixes found by printing:
+unchanged from v7.3). The v7.4 right half, the only part that changed, has
+since been printed with no major issues reported. Fixes found by printing:
 
 - **v7.0:** v6.2 and earlier printed the mirror image: the DWG plate frame is a
   top view, the print frame the underside. The USB-C notch came out on the
