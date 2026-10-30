@@ -210,11 +210,12 @@ INNER_SKIRT_R = 2.00    # Inner skirt (bottom-case pocket) vertical corner radiu
                         # case ~2.3 mm off its seat at the corners (owner, printed part): its corners are about
                         # R5.0 - 2.3 = R2.7, so the pocket takes R2.0 to clear them with the straight walls line-to-line.
 RIB = 2.40              # Honeycomb rib width (matches v9)
-# Bumpon pads: 8 sites on the wrist-rest underside, each with a pocket for a 3M Bumpon SJ5012 (flat-top cylinder,
-# Ø12.7 x 3.5 mm, +-0.5 mm). The bumpons fill the gap the stock bottom-case feet leave under the wrist rest; the pocket
-# sets how far they stand proud of the pad face (`DESK_GAP`) and holds them against sideways shear. Each pad runs
-# `PAD_D` in from the front face (front row) or the junction wall (back row): full height near the wall, then a 45-deg
-# corbel that prints without support. v7.4 had 6 mm deep flat pads, v7.5 11 mm deep flat pads for the Ø7.9 SJ5302.
+# Bumpon pads: 8 sites on the wrist-rest underside, each with a pocket for a 3M Bumpon Protective Products SJ5012
+# (cylindrical, flat top, Ø12.7 x 3.5 mm, +-0.5 mm; same shape as SJ5312 transparent and SJ5412 true white). The bumpons
+# fill the gap the stock bottom-case feet leave under the wrist rest; the pocket sets how far they stand proud of the pad
+# face (`DESK_GAP`) and holds them against sideways shear. Each pad runs `PAD_D` in from the front face (front row) or
+# the junction wall (back row): full height near the wall, then a 45-deg corbel that prints without support. v7.4 had
+# 6 mm deep flat pads, v7.5 11 mm deep flat pads for the hemispherical Ø7.9 x 2.2 mm SJ5302.
 BUMPON_D = 12.7         # 3M SJ5012 diameter (datasheet nominal)
 BUMPON_D_MAX = 13.2     # Diameter at the +0.5 mm datasheet tolerance
 BUMPON_H = 3.5          # 3M SJ5012 height (datasheet nominal)
@@ -1260,7 +1261,7 @@ def main() -> None:
             "dovetails": [{"name": n, "yc": yc, "proj": proj, "z_stop": z_stop, "z_top": z_top}
                           for n, yc, _, _, proj, z_stop, z_top, *_ in JOINTS_SPEC],
             "bumpon_pads": {
-                "bumpon": "3M Bumpon SJ5012",
+                "bumpon": "3M Bumpon Protective Products SJ5012 (same shape: SJ5312 transparent, SJ5412 true white)",
                 "bumpon_diameter": BUMPON_D,
                 "bumpon_diameter_max": BUMPON_D_MAX,
                 "bumpon_height": BUMPON_H,

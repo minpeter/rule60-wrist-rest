@@ -174,12 +174,12 @@ printing:
   stock notch photographed against the print.
 - **v7.4:** USB-C notch 8.7 mm deep from the lip.
 - **v7.5 (not printed):** the eight bumpon pads run 11 mm instead of 6 mm in,
-  so a 3M SJ5302 bumpon (Ø7.9 mm) sits wholly on its pad instead of hanging
+  so a 3M Bumpon SJ5302 (Ø7.9 mm) sits wholly on its pad instead of hanging
   ~1 mm past the front face.
-- **v7.6:** the pads take the flat-top 3M SJ5012 (Ø12.7 × 3.5 mm) instead:
-  16 × 16 mm pads, each with a Ø13.6 × 1.5 mm pocket square to the desk, so
-  the bumpon stands 2.0 mm proud and the pocket wall resists sideways push.
-  Past ~6 mm each pad is a 45° corbel (no supports).
+- **v7.6:** the pads take the flat-top 3M Bumpon SJ5012 (Ø12.7 × 3.5 mm)
+  instead: 16 × 16 mm pads, each with a Ø13.6 × 1.5 mm pocket square to the
+  desk, so the bumpon stands 2.0 mm proud and the pocket wall resists sideways
+  push. Past ~6 mm each pad is a 45° corbel (no supports).
 - **v7.7:** USB-C notch centre 2 mm further from the keyboard centre (toward
   the Esc-side edge); width and depth unchanged.
 
@@ -203,11 +203,16 @@ print ramp keep a 0.20 mm vertical glue line. Use epoxy or gel cyanoacrylate.
 Strike-plate screws must not exceed **5.0 mm under the head** (1.45 mm plate +
 3.55 mm pilot).
 
-**Bumpons:** press one 3M Bumpon SJ5012 (Ø12.7 × 3.5 mm, flat top) into each
-of the eight pockets under the wrist rest, four along the front edge and four
-along the keyboard junction. Each stands 2.0 mm proud of the pad, to fill the
-~2 mm the stock feet lift the keyboard (estimated, not measured). The pockets
-do not suit SJ5302: a 2.2 mm bumpon would stand only 0.7 mm proud.
+**Bumpons:** eight **3M™ Bumpon™ Protective Products SJ5012**: cylindrical,
+flat top, Ø12.7 × 3.5 mm (±0.5 mm), black, white, grey or brown. The same
+shape is sold as **SJ5312** (transparent) and **SJ5412** (true white); any of
+the three fits ([3M datasheet](https://multimedia.3m.com/mws/media/117314O/3m-bumpon-protective-products-molded-shapes-colored-and-clear.pdf)).
+Press one into each pocket under the wrist rest, four along the front edge and
+four along the keyboard junction. Each stands 2.0 mm proud of the pad, to fill
+the ~2 mm the stock feet lift the keyboard (estimated, not measured). The
+hemispherical **SJ5302** (Ø7.9 × 2.2 mm, transparent; SJ5302BL is its
+80-piece blister pack) does not suit the pockets: it would stand only 0.7 mm
+proud.
 
 ### Printing
 
@@ -261,7 +266,7 @@ glue lines, the back-seam strike screws, layer islands and flat overhangs, and
 virtual stock parts: the DWG plate through 0.25 mm upward flex, 12 caps,
 four strikes, 60 HHKB keycaps through full travel and the stock bottom-case
 pocket, the USB-C notch side, width and depth, and an Ø13.2 mm bumpon
-(SJ5012 at its +0.5 mm tolerance) fitting each of the eight wrist-rest pockets
+(3M Bumpon SJ5012 at its +0.5 mm tolerance) fitting each of the eight wrist-rest pockets
 on a full floor with at least 1 mm of wall. The v7.4 halves, rebuilt at the printed
 layer heights, passed the same checks except one: the wedge-key tip's top
 0.10 mm layer reaches 0.05 mm into the notch layer below it, so the key tip
