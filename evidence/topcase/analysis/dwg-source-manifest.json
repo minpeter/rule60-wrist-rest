@@ -1,0 +1,120 @@
+{
+  "source_repository": "https://github.com/minjunkim0205/Hobby-CustomKeyboard",
+  "revision": "ecf3575e9fb844d32f57b42ce6f7f23f30294396",
+  "files": [
+    {
+      "path": "reference-repository/README.md",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/README.md",
+      "bytes": 215,
+      "sha256": "c2ab5e6b1cec935a9a384eb5cc046348f8c8e22a38b6423c131c8e4638ceba50"
+    },
+    {
+      "path": "reference-repository/housing-design-files/README.md",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/housing-design-files/README.md",
+      "bytes": 489,
+      "sha256": "76ecc61bd3def2b5e1962566825ad969b635879ded51f36c4cfdd547e9936770"
+    },
+    {
+      "path": "reference-repository/housing-design-files/gasket-top/README.md",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/housing-design-files/gasket-top/README.md",
+      "bytes": 351,
+      "sha256": "9e713aae9017f84ffd428af0ba21d1af2dbb5ee0045061fef6f27b67184643ec"
+    },
+    {
+      "path": "reference-repository/housing-design-files/gasket-top/rule60-gasket-top-v1.1.dwg",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/housing-design-files/gasket-top/rule60-gasket-top-v1.1.dwg",
+      "bytes": 397289,
+      "sha256": "6373457e80adc1243c30681cf51d9a10215354a641392c5b02dcaa09c01237ac"
+    },
+    {
+      "path": "reference-repository/housing-design-files/gasket-top/rule60-gasket-top-v1.1.png",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/housing-design-files/gasket-top/rule60-gasket-top-v1.1.png",
+      "bytes": 27129,
+      "sha256": "d28d89d2efdf732660ddb6fbae6c5652e81184360624a6033887b086dd3533dd"
+    },
+    {
+      "path": "reference-repository/housing-design-files/gasket-top/rule60-gasket-top-v1.2.dwg",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/housing-design-files/gasket-top/rule60-gasket-top-v1.2.dwg",
+      "bytes": 409894,
+      "sha256": "892e1a6bc3e657110a16a3eab49beddf06161eb85a489720c171d5046488e54b"
+    },
+    {
+      "path": "reference-repository/housing-design-files/gasket-top/rule60-gasket-top-v1.2.png",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/housing-design-files/gasket-top/rule60-gasket-top-v1.2.png",
+      "bytes": 27745,
+      "sha256": "3466a599e57dc0293bd041f7d5951b878f69b8db2fd720745837097905acdeb9"
+    },
+    {
+      "path": "reference-repository/housing-design-files/rule60-gasket-top-venom.dwg",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/housing-design-files/rule60-gasket-top-venom.dwg",
+      "bytes": 399403,
+      "sha256": "ec3aef4fb9cb31fb759555f6f34272bd1b25af72dd568991f1944c1e5b403184"
+    },
+    {
+      "path": "reference-repository/housing-design-files/rule60-gasket-top.zip",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/housing-design-files/rule60-gasket-top.zip",
+      "bytes": 734721,
+      "sha256": "569214c1fbd709c10d469f87e90f08bcb7d53187a2b15b14164ce918ab35a54a"
+    },
+    {
+      "path": "reference-repository/housing-design-files/rule60-island.dwg",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/housing-design-files/rule60-island.dwg",
+      "bytes": 22659,
+      "sha256": "b5bb34a825e883d4e266d0fda98f572fb16f3f13b6406c48be31cbb7f2d46555"
+    },
+    {
+      "path": "reference-repository/housing-design-files/rule60-top-gasket-socks.dwg",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/housing-design-files/rule60-top-gasket-socks.dwg",
+      "bytes": 119904,
+      "sha256": "2b452834c78b01072c41e513d045e3ebccfa208b4d384f81dc164543febcc3fd"
+    },
+    {
+      "path": "reference-repository/housing-design-files/rule60-v3.dwg",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/housing-design-files/rule60-v3.dwg",
+      "bytes": 388368,
+      "sha256": "48ca24d1f7cf39dba5b0d91581277c6039f2e165a1af83417343bf3f1d53c35c"
+    },
+    {
+      "path": "reference-repository/plate-files/README.md",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/plate-files/README.md",
+      "bytes": 480,
+      "sha256": "88cdd3605f7abc75711e69aa9693394248f654dd0eff07fb7fc5247d214d633a"
+    },
+    {
+      "path": "reference-repository/plate-files/Rule60_625u_plate_HE(AE61_PRO).dwg",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/plate-files/Rule60_625u_plate_HE(AE61_PRO).dwg",
+      "bytes": 118782,
+      "sha256": "0f0ad3a1f97d09f006f94868c768820f8482a8d54ed056b48c757cfb31c51341"
+    },
+    {
+      "path": "reference-repository/plate-files/Rule60_625u_plate_HE(AE61_PRO).md",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/plate-files/Rule60_625u_plate_HE(AE61_PRO).md",
+      "bytes": 474,
+      "sha256": "dbfda688d333ffb5d298a077889a8872118ebc5e55fba2022f3d7b483e367b73"
+    },
+    {
+      "path": "reference-repository/plate-files/Rule60_625u_plate_HE(AE61_PRO)_001.png",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/plate-files/Rule60_625u_plate_HE(AE61_PRO)_001.png",
+      "bytes": 81518,
+      "sha256": "d282ccde17eadba0ec8a81c9336d8d90f3cb9d9a36d95a97f60803bed1d1ad3d"
+    },
+    {
+      "path": "reference-repository/plate-files/Rule60_7u625u_plate_HE(VENOM).dwg",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/plate-files/Rule60_7u625u_plate_HE(VENOM).dwg",
+      "bytes": 68186,
+      "sha256": "5f553c1db3ba99db72873a5372fc921a071bb7a05611309ac96445293348c360"
+    },
+    {
+      "path": "reference-repository/plate-files/Rule60_7u625u_plate_HE(VENOM).md",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/plate-files/Rule60_7u625u_plate_HE(VENOM).md",
+      "bytes": 472,
+      "sha256": "3ca68eb7fca967ca05989fccec4fb830c7aac22db1741f11be09795bb10cc2ec"
+    },
+    {
+      "path": "reference-repository/plate-files/Rule60_7u625u_plate_HE(VENOM)_001.png",
+      "source": "https://github.com/minjunkim0205/Hobby-CustomKeyboard/blob/ecf3575e9fb844d32f57b42ce6f7f23f30294396/keyboards/housings/Rule60/plate-files/Rule60_7u625u_plate_HE(VENOM)_001.png",
+      "bytes": 51338,
+      "sha256": "ffe755047c611e584a3cae4bb31c24ff5f103b62c2a02b2c926e3c5680989acb"
+    }
+  ]
+}

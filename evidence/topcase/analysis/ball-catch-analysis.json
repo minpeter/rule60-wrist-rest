@@ -1,0 +1,186 @@
+{
+  "calibration": {
+    "datum": "8 top-mount screw holes of rule 60-6095(top) DWG on top-case underside rail plane (Z=0)",
+    "homography_rms_mm": 0.13,
+    "camera_in_plate_frame_mm": [
+      211.92,
+      -41.77,
+      -415.74
+    ],
+    "bottom_case_inter_catch_scale_factor": 1.007
+  },
+  "locations_in_plate_frame_mm": {
+    "plate_x_center_mm": 142.95,
+    "BL": {
+      "screws": [
+        [
+          83.4,
+          105.9
+        ],
+        [
+          96.3,
+          105.95
+        ]
+      ],
+      "center": [
+        89.85,
+        105.92
+      ],
+      "screw_pitch": 12.9
+    },
+    "BR": {
+      "screws": [
+        [
+          190.25,
+          105.5
+        ],
+        [
+          203.15,
+          105.6
+        ]
+      ],
+      "center": [
+        196.7,
+        105.55
+      ],
+      "screw_pitch": 12.9
+    },
+    "FL": {
+      "screws": [
+        [
+          83.7,
+          0.8
+        ],
+        [
+          96.75,
+          0.95
+        ]
+      ],
+      "center": [
+        90.22,
+        0.88
+      ],
+      "screw_pitch": 13.05
+    },
+    "FR": {
+      "screws": [
+        [
+          189.75,
+          0.75
+        ],
+        [
+          202.8,
+          0.8
+        ]
+      ],
+      "center": [
+        196.28,
+        0.77
+      ],
+      "screw_pitch": 13.05
+    },
+    "left_right_center_spacing_mm": {
+      "back": 106.85,
+      "front": 106.06,
+      "mean": 106.46
+    },
+    "front_back_center_spacing_mm": {
+      "left": 105.04,
+      "right": 104.78,
+      "mean": 104.91
+    }
+  },
+  "strike_plate_top_case_mm": {
+    "length_L1": {
+      "estimate": 20.5,
+      "tolerance": 0.6,
+      "pocket_length": 22.0
+    },
+    "width_B1": {
+      "estimate": 5.4,
+      "tolerance": 0.4,
+      "pocket_width": 6.5
+    },
+    "hole_pitch_A1": {
+      "estimate": 13.0,
+      "tolerance": 0.2
+    },
+    "tongue_width": {
+      "estimate": 3.55,
+      "tolerance": 0.25
+    },
+    "tongue_tip_height_H2": {
+      "estimate": 5.7,
+      "tolerance": 0.5,
+      "method": "4-corner parallax triangulation"
+    },
+    "screw": "M2 countersunk Phillips (head OD ~3.9-4.1 mm)"
+  },
+  "catch_body_bottom_case_mm": {
+    "length_L": {
+      "estimate": 31.8,
+      "tolerance": 0.6
+    },
+    "width_base_B": {
+      "estimate": 6.7,
+      "tolerance": 0.4
+    },
+    "overall_depth_over_barrel_H": {
+      "estimate": 7.7,
+      "tolerance": 0.5
+    },
+    "hole_pitch_A": {
+      "estimate": 25.5,
+      "tolerance": 0.4
+    },
+    "barrel_length_each": {
+      "estimate": 8.0,
+      "tolerance": 0.4
+    },
+    "center_slot_between_barrels": {
+      "estimate": 5.2,
+      "tolerance": 0.4
+    },
+    "ball_to_ball_gap_free": {
+      "estimate": 3.5,
+      "tolerance": 0.4
+    },
+    "tension_adjustment": "Slotted end-plug screws on both barrel ends (adjustable spring preload)",
+    "material_appearance": "Machined/cast stainless steel (matte silver, non-plated appearance)"
+  },
+  "catalog_comparison": {
+    "type": "Sub-miniature adjustable double-ball tension catch (双球碰珠 / 碰珠快拆), smaller than standard industrial catalog 32-43 mm series",
+    "closest_catalog_equivalents": [
+      {
+        "model": "KIPP K0583.322 (stainless 1.4401)",
+        "body_L": 32,
+        "body_pitch_A": 25,
+        "strike_L1": 18,
+        "strike_pitch_A1": 11,
+        "diff": "Strike shorter (18/11 vs ~20.5/13) and wider (8 vs ~6.7)"
+      },
+      {
+        "model": "Sugatsune BCU-40",
+        "body_L": 28.5,
+        "body_pitch_P1": 20,
+        "strike_I": 24,
+        "strike_pitch_P2": 16,
+        "diff": "Body shorter (28.5/20 vs ~31.8/25.5), non-adjustable"
+      },
+      {
+        "model": "MISUMI BCAS32 / BCASD32",
+        "body_L": 32,
+        "screw": "M3 countersunk",
+        "diff": "Uses M3 screws; Rule60 catch uses M2 screws (~4.0 mm head) to fit narrow ~6.7 mm case wall"
+      },
+      {
+        "model": "TAKIGEN C-1090-2",
+        "body_L": 43,
+        "body_pitch": 35,
+        "strike_L": 25,
+        "strike_pitch": 16,
+        "diff": "Same topology (slotted adjustable dual barrels + T-strike), 1 size class larger"
+      }
+    ]
+  }
+}
