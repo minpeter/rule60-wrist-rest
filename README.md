@@ -160,7 +160,8 @@ On the desk the wrist rest sits slightly high and creaks when pressed, most
 likely because the stock bottom-case feet hold the keyboard about 2 mm above
 the desk (estimated, not measured) while the model puts the wrist-rest
 underside level with the top-case lip. Bumpons under the wrist rest fill that
-gap; v7.6 seats them in pockets and has not been printed yet. Fixes found by
+gap. The USB-C connector works but sits about 2 mm off-centre in its notch.
+v7.6 and v7.7 address these and have not been printed yet. Fixes found by
 printing:
 
 - **v7.0:** v6.2 and earlier printed the mirror image: the DWG plate frame is a
@@ -179,6 +180,8 @@ printing:
   16 × 16 mm pads, each with a Ø13.6 × 1.5 mm pocket square to the desk, so
   the bumpon stands 2.0 mm proud and the pocket wall resists sideways push.
   Past ~6 mm each pad is a 45° corbel (no supports).
+- **v7.7:** USB-C notch centre 2 mm further from the keyboard centre (toward
+  the Esc-side edge); width and depth unchanged.
 
 [Fit photos](evidence/topcase/README.md#photos) are in the evidence folder.
 
@@ -218,9 +221,10 @@ These 3MFs include a Bambu Studio / Orca **height-range modifier: 0.10 mm
 layers from Z 5.4 to 10.0 mm**. At 0.20 mm the 6.30 mm gasket-cap floor
 prints at 6.4 and the 9.69 mm bottom-case seat at 9.6, pinching the caps
 0.19 mm more; with the range they print at 6.3 and 9.7. Confirm the range in
-the object list after opening. Bambu Studio CLI estimates (v7.6): left
-4 h 25 min / 78 g, right 3 h 57 min / 67 g; coupons (unchanged since v7.4)
-1 h 47 min / 33 g. The CLI slice reported ZFiller diagnostics.
+the object list after opening. Bambu Studio CLI estimates (v7.6; v7.7 only
+moves the USB-C notch, same volume): left 4 h 25 min / 78 g, right
+3 h 57 min / 67 g; coupons (unchanged since v7.4) 1 h 47 min / 33 g. The CLI
+slice reported ZFiller diagnostics.
 
 ### Reproduce
 

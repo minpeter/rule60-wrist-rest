@@ -234,7 +234,9 @@ def pad_centres() -> list[tuple[float, float]]:
     return [(s * c, y) for y in (PAD_D / 2, WRIST_D - PAD_D / 2) for c in PAD_X for s in (-1.0, 1.0)]
 
 
-USB_X = pw(19.35, 0.0)[0]  # USB-C centre: plate X 19.35 (stock back-left, Esc side) -> print X +123.60
+# USB-C centre: plate X 17.35 (stock back-left, Esc side) -> print X +125.60. v7.6 and earlier had plate X 19.35; on the
+# v7.4 print the connector sat ~2 mm toward the keyboard centre of the notch (owner), so the notch moved 2 mm outward.
+USB_X = pw(17.35, 0.0)[0]
 # Width and corner shape from the stock notch measured against the v6.2 print (owner photos IMG_0378/0379, scaled from
 # the printed 14.2 mm notch): 12.6 / 12.75 wide, rounded closed-end corners (CNC endmill); 0.1-0.2 mm generous. Depth
 # from the v7.3 full-print fit: the photo-estimated 5.7 mm hit the USB-C connector until the owner cut the notch ~3 mm
@@ -1194,7 +1196,7 @@ def main() -> None:
     )
 
     report = {
-        "version": "v7.6-sj5012-pockets",
+        "version": "v7.7-usb-notch-2mm-out",
         "generator": "SolidCraft v0.22.0 parametric timeline + 28px/mm gasket metrology",
         "solidcraft_design": str(design_path.relative_to(Path(__file__).resolve().parent)),
         "step_export": str(step_path.relative_to(Path(__file__).resolve().parent)),
