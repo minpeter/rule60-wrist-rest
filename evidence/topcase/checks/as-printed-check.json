@@ -1,6 +1,7 @@
 {
-  "version": "v6.2-line-to-line-back-seam",
+  "version": "v7.4-usb-notch-8p7",
   "method": "Both exported halves re-stacked layer by layer at the printed schedule (0.20 mm, 0.10 mm from Z 5.4 to 10.0; 123 layers, each layer = the part section at mid-layer extruded to full layer height), then run through verify_topcase.py with the stock strike plates seated on their printed 5.6 mm floor. Plan clearances measured from the hardware footprints to the as-printed material on every layer in each part's Z band.",
+  "result": "All checks pass except the vertical free-play check: lowering the LeftHalf 0.18 mm touches 0.012 mm^3 at the back-seam wedge-key tip (its top 0.1 mm layer, Z 5.5-5.6, reaches 0.05 mm past the notch layer below the 0.20/0.10 mm layer change at Z 5.4). The key tip bears after ~0.15 mm instead of 0.20 mm; recorded, not enforced.",
   "layer_schedule_mm": {
     "0.0-5.4": 0.2,
     "5.4-10.0": 0.1,
@@ -22,41 +23,42 @@
       "cap_pocket": 6.3,
       "bottom_case_seat": 9.7
     },
-    "source": "Bambu Studio 2.8.2 CLI G-code of the shipped 3MFs: highest layer with extrusion inside each pocket footprint"
+    "source": "Bambu Studio 2.8.2 CLI G-code (v6.2 slice; Z levels and layer schedule unchanged since)"
   },
   "verify_design": {
     "status": "ALL_PASSED",
     "dovetail_insertion_path": {
       "steps_checked": 91,
-      "free_slide_drag_dz_ge_3p2mm_mm3": 0.00026,
-      "max_overlap_outside_compression_ribs_mm3": 0.001563,
-      "seated_compression_rib_bite_mm3": 0.5136
+      "free_slide_drag_dz_ge_3p2mm_mm3": 0.000247,
+      "max_overlap_outside_compression_ribs_mm3": 0.000255,
+      "seated_compression_rib_bite_mm3": 0.5123
     },
     "six_dof_retention_mm3": {
-      "pull_apart_x_1mm": 79.87,
-      "push_together_x_0p5mm": 729.059,
-      "shear_y_plus_0p5mm": 86.207,
-      "shear_y_minus_0p5mm": 84.469,
-      "overtravel_z_stop_0p3mm_past_clearance": 61.894,
+      "pull_apart_x_1mm": 79.869,
+      "push_together_x_0p5mm": 728.804,
+      "shear_y_plus_0p5mm": 86.206,
+      "shear_y_minus_0p5mm": 84.471,
+      "overtravel_z_stop_0p3mm_past_clearance": 61.892,
       "clean_release_dz_18mm": 0.0
     },
     "dovetail_z_stop_clearance": {
       "design_mm": 0.2,
-      "overlap_at_0p18mm_mm3": 0.00156,
-      "landing_overlap_at_0p25mm_mm3": 2.41
+      "overlap_at_0p18mm_mm3": 0.000237,
+      "landing_overlap_at_0p25mm_mm3": 2.408
     },
     "back_seam": {
       "seam_faces_x_mm": {
         "z1": [
-          53.75,
-          53.75
+          53.1,
+          53.1
         ],
         "z12": [
-          53.75,
-          53.75
+          53.1,
+          53.1
         ]
       },
-      "br_pilot_ring_cover_left_right": {
+      "seam_strike": "BL",
+      "seam_strike_pilot_ring_cover_left_right": {
         "left_pilot": [
           1.0,
           0.0
@@ -86,15 +88,15 @@
         1.0,
         1.0
       ],
-      "br_strike_bearing_left_right_mm2": [
+      "seam_strike_bearing_left_right_mm2": [
         75.2,
         53.6
       ],
       "key_side_shift_0p05mm_overlap_mm3": [
-        0.316,
-        0.314
+        0.315,
+        0.315
       ],
-      "end_face_push_0p05mm_overlap_mm3": 4.66
+      "end_face_push_0p05mm_overlap_mm3": 4.634
     },
     "joint_glue_line_max_gap_mm": {
       "WristFrontJoint": 0.199,
@@ -120,6 +122,16 @@
       1.0
     ],
     "floor_cover_outside_declared_cuts": 1.0,
+    "chirality_usb_notch_x_and_back_pocket_centres": {
+      "usb_notch_x": [
+        117.2,
+        130.0
+      ],
+      "back_outer_pocket_abs_x": {
+        "usb": 94.93,
+        "far": 105.05
+      }
+    },
     "strike_tongue_to_plate_gap_mm": [
       0.934,
       0.784,
@@ -128,38 +140,39 @@
     ]
   },
   "verify_as_printed": {
-    "status": "ALL_PASSED",
+    "status": "PASSED_EXCEPT_FREE_PLAY_0P18 (see result)",
     "dovetail_insertion_path": {
       "steps_checked": 91,
-      "free_slide_drag_dz_ge_3p2mm_mm3": 0.000263,
-      "max_overlap_outside_compression_ribs_mm3": 0.001547,
-      "seated_compression_rib_bite_mm3": 0.5135
+      "free_slide_drag_dz_ge_3p2mm_mm3": 0.000245,
+      "max_overlap_outside_compression_ribs_mm3": 0.000259,
+      "seated_compression_rib_bite_mm3": 0.5122
     },
     "six_dof_retention_mm3": {
-      "pull_apart_x_1mm": 80.17,
-      "push_together_x_0p5mm": 729.297,
-      "shear_y_plus_0p5mm": 86.42,
-      "shear_y_minus_0p5mm": 84.578,
-      "overtravel_z_stop_0p3mm_past_clearance": 61.849,
-      "clean_release_dz_18mm": 0.0
+      "pull_apart_x_1mm": 80.169,
+      "push_together_x_0p5mm": 729.13,
+      "shear_y_plus_0p5mm": 86.596,
+      "shear_y_minus_0p5mm": 84.757,
+      "overtravel_z_stop_0p3mm_past_clearance": 61.923,
+      "clean_release_dz_18mm": -0.0
     },
     "dovetail_z_stop_clearance": {
       "design_mm": 0.2,
-      "overlap_at_0p18mm_mm3": 0.002062,
-      "landing_overlap_at_0p25mm_mm3": 2.494
+      "overlap_at_0p18mm_mm3": 0.012234,
+      "landing_overlap_at_0p25mm_mm3": 2.507
     },
     "back_seam": {
       "seam_faces_x_mm": {
         "z1": [
-          53.75,
-          53.75
+          53.1,
+          53.1
         ],
         "z12": [
-          53.75,
-          53.75
+          53.1,
+          53.1
         ]
       },
-      "br_pilot_ring_cover_left_right": {
+      "seam_strike": "BL",
+      "seam_strike_pilot_ring_cover_left_right": {
         "left_pilot": [
           1.0,
           0.0
@@ -189,15 +202,15 @@
         1.0,
         1.0
       ],
-      "br_strike_bearing_left_right_mm2": [
-        64.7,
+      "seam_strike_bearing_left_right_mm2": [
+        75.4,
         53.4
       ],
       "key_side_shift_0p05mm_overlap_mm3": [
-        0.308,
-        0.305
+        0.324,
+        0.324
       ],
-      "end_face_push_0p05mm_overlap_mm3": 4.666
+      "end_face_push_0p05mm_overlap_mm3": 4.64
     },
     "joint_glue_line_max_gap_mm": {
       "WristFrontJoint": 0.2,
@@ -223,6 +236,16 @@
       1.0
     ],
     "floor_cover_outside_declared_cuts": 1.0,
+    "chirality_usb_notch_x_and_back_pocket_centres": {
+      "usb_notch_x": [
+        117.2,
+        130.0
+      ],
+      "back_outer_pocket_abs_x": {
+        "usb": 94.93,
+        "far": 105.05
+      }
+    },
     "strike_tongue_to_plate_gap_mm": [
       0.934,
       0.784,
@@ -243,25 +266,24 @@
     "note": "front caps face the front floor ledge; cap size is photo-derived"
   },
   "slice_estimates": {
-    "settings": "X2D 0.4 nozzle, Bambu PETG Translucent, 0.20mm Standard @BBL X2D, 3 walls, 15% infill, no supports, Textured PEI",
+    "settings": "X2D 0.4 nozzle, Bambu PETG Translucent, 0.20mm Standard @BBL X2D, 3 walls, 15% infill, no supports, no brim, Textured PEI; 0.10 mm range from the 3MF",
     "rule60-hhkb-topcase-left.3mf": {
-      "time": "4h 13m 46s",
-      "filament_g": 74.72
+      "time": "4h 14m 58s",
+      "filament_g": 75.28
     },
     "rule60-hhkb-topcase-right.3mf": {
-      "time": "3h 45m 56s",
-      "filament_g": 64.63
+      "time": "3h 47m 4s",
+      "filament_g": 64.56
     },
     "rule60-hhkb-topcase-fit-coupons.3mf": {
-      "time": "1h 47m 31s",
-      "filament_g": 33.52
+      "time": "1h 47m 10s",
+      "filament_g": 33.48
     },
-    "diagnostics": "ZFiller errors in the CLI log; slices completed"
+    "diagnostics": "ZFiller errors in the CLI log for the right half and coupons; slices completed"
   },
   "not_simulated": [
-    "stock bottom case dimensions (pocket copies the stock top case)",
+    "stock bottom case dimensions (pocket copies the stock top case; corner radius from the v6.2 fit)",
     "front ball-catch strike positions (centred, not measured)",
-    "deformation, insertion force, glue strength",
-    "print shrinkage (owner: the previous palm rest printed at exactly 295.0 mm)"
+    "deformation, insertion force, glue strength"
   ]
 }

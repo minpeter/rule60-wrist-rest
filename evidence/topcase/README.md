@@ -25,7 +25,17 @@ increasing toward the skirt lip.
 | Short-side underside steps from the outer edge (wall / 9.69 ledge / 6.30 strip) | 2.85 / 4.90 / 5.66 | owner, message 2026-10-29 | `RIM_SEAT_W` = 2.05; checked by `short_side_steps_2p85_4p90_5p66` |
 | Previous wrist-rest print length (same printer, PETG, settings; design 295.0) | 295.0 | owner, message 2026-10-29 | shrinkage check |
 
-Readings not used in v6.2:
+## Full-print fit results
+
+| Version | Finding (owner) | Change |
+| --- | --- | --- |
+| v6.2 | USB-C notch on the wrong side; outer back gasket tabs ~9.5 mm off their pockets ([0374](photos/IMG_0374.jpg), [0375](photos/IMG_0375.jpg)) | v7.0: the whole model was mirrored; plate X now mirrored into the underside print frame. Pocket offset was 10.12 mm. |
+| v6.2 | Front-back length right, but the stock bottom case stood ~2.3 mm off at the pocket corners ([0370](photos/IMG_0370.jpg)–[0373](photos/IMG_0373.jpg)) | v7.1: pocket corners R5.0 → R2.0 (stock corner ≈ R5.0 − 2.3 = R2.7) |
+| v6.2 | Stock USB-C notch smaller with rounded corners ([0378](photos/IMG_0378.jpg), [0379](photos/IMG_0379.jpg): stock top case lip-to-lip on the print) | v7.2: 12.8 wide, R1.5 closed-end corners; width scaled from the printed 14.2 mm notch (stock 12.6 / 12.75) |
+| — | Outer corners looked too round against R2.0 inside (owner request) | v7.3: outer R8.0 → R4.85, concentric (uniform 2.85 mm wall) |
+| v7.3 | Assembles; USB-C connector hit the notch until it was cut ~3 mm deeper by hand | v7.4: notch 5.7 → 8.7 mm deep from the lip; left half unchanged |
+
+Readings not used:
 
 | Photo | Reading | Note |
 | --- | --- | --- |
@@ -65,10 +75,13 @@ upright and in their original colours.
 | [0313](photos/IMG_0313.jpg)–[0317](photos/IMG_0317.jpg) | v4.6 printed corner coupon (white) fitted to the stock case: strike plate in its pocket, bottom-case nesting from the side |
 | [0318](photos/IMG_0318.jpg), [0319](photos/IMG_0319.jpg) | Same coupon on the assembled keyboard |
 | [0333](photos/IMG_0333.jpg)–[0337](photos/IMG_0337.jpg), [0340](photos/IMG_0340.jpg), [0341](photos/IMG_0341.jpg) | Caliper readings (table above) |
+| [0370](photos/IMG_0370.jpg)–[0373](photos/IMG_0373.jpg) | v6.2 left half with the stock bottom case pushed in: stuck ~2.3 mm short at the R5.0 corners |
+| [0374](photos/IMG_0374.jpg), [0375](photos/IMG_0375.jpg) | v6.2 left half with the gasket plate: outer back caps outside their pockets |
+| [0378](photos/IMG_0378.jpg), [0379](photos/IMG_0379.jpg) | Stock top case on the v6.2 print, lip to lip: USB-C notch comparison |
 
 The v4.6 coupon test (owner, 2026-10-28) confirmed joint positions, ball-catch
-engagement and screw-hole size. The outline and Z levels were re-measured
-afterwards, so that result does not carry over to v6.2 unchanged.
+engagement and screw-hole size. It was a front corner, where the gasket tabs and
+strikes are nearly symmetric, so it could not reveal the v6.2 mirror image.
 
 ## Analysis artefacts
 
@@ -81,16 +94,15 @@ afterwards, so that result does not carry over to v6.2 unchanged.
 | [ball-catch-analysis.json](analysis/ball-catch-analysis.json) | Strike/catch positions and hardware size estimates |
 | [dwg-source-manifest.json](analysis/dwg-source-manifest.json) | Source URLs and SHA-256 of the downloaded Rule60 drawings |
 
-## Checks (v6.2)
+## Checks (v7.4)
 
 | File | Content |
 | --- | --- |
 | [../topcase-verification.json](../topcase-verification.json) | `verify_topcase.py` output on the exported halves |
-| [../topcase-report.json](../topcase-report.json) | Build report: Z stack, pocket outlines, back seam, dovetails |
-| [checks/as-printed-check.json](checks/as-printed-check.json) | Same checks on both halves rebuilt at the printed layer heights, printed floor heights from the sliced G-code, plan clearances to the stock parts, slicer estimates |
-| [checks/seams-v6.2.png](checks/seams-v6.2.png) | Split line, back-seam plan at the BR strike, and sections through the 3 dovetails and the wedge key |
-| [checks/underside-levels-v6.2.png](checks/underside-levels-v6.2.png) | Underside height map with the front-left corner enlarged |
+| [../topcase-report.json](../topcase-report.json) | Build report: Z stack, pocket outlines, back seam, dovetails, USB-C notch |
+| [checks/as-printed-check.json](checks/as-printed-check.json) | Same checks on both halves rebuilt at the printed layer heights, plan clearances to the stock parts, slicer estimates. One finding: the wedge-key tip bears after ~0.15 mm of its 0.20 mm vertical glue line. |
+| [checks/seams-v7.4.png](checks/seams-v7.4.png) | Split line, back-seam plan at the BL strike, and sections through the 3 dovetails and the wedge key |
 
-`as-printed-check.json` and the two check images were produced during the
-design session, not by `build_topcase_draft.py`; regenerate them by hand if the
+`as-printed-check.json` and the seam image were produced during the design
+session, not by `build_topcase_draft.py`; regenerate them by hand if the
 geometry changes.

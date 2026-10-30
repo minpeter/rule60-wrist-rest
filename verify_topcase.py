@@ -7,7 +7,7 @@ Verifies exported CAD files (not in-memory construction) across 6 independent su
      strictly confined inside the compression-rib bands of the 3 X = 0 dovetails.
   3. 6-DOF Retention & Stop Stiffness: X-separation, Y-shear, and -Z overtravel past the `0.20 mm` vertical stop
      clearance all blocked; the vertical free play itself is measured (clear at 0.18 mm, contact by 0.25 mm).
-  4. Staggered Back Seam: both seam faces at `BR strike centre -/+ gap/2` (line-to-line), one full-depth strike pilot
+  4. Staggered Back Seam: both seam faces at `seam strike centre -/+ gap/2` (line-to-line), one full-depth strike pilot
      per half, the strike plate bearing on both halves, the wedge key sides line-to-line; glue lines: every male part
      (3 tongues + key) meets its female over all faces with no gap wider than 0.25 mm.
   5. 0.20 mm FDM Layer-Slice Connectivity (both halves + all fit-test coupons): zero floating / unsupported islands and
@@ -21,6 +21,7 @@ Verifies exported CAD files (not in-memory construction) across 6 independent su
        - Full 60-Key HHKB Cherry/OEM Keycap Array + >= 0.35 mm perimeter clearance
        - Stock base pocket: empty from the 9.69 mm floor to the skirt lip inside the skirt (bottom-case seat); the frame
          at the 9.69 mm floor (IMG_0334) outside the declared cuts
+       - Chirality: USB-C notch at print +X (keyboard left in the underside view) with the inward back-left gasket pocket
   Z levels come from `draft-report.json` (`calibrated_z_stack_mm`), written by the build.
 
 Usage:
@@ -50,6 +51,13 @@ DWG_JSON = Path(os.environ.get("RULE60_DWG_JSON", ""))
 REPORT = json.loads((ROOT / "draft-report.json").read_text())
 GEOM = REPORT["geometry_mm"]
 DX_PW, DY_PW = GEOM["plate_to_world_offset"]
+PW_SX = GEOM["plate_to_world_x_sign"]  # print frame = underside view: plate X is mirrored
+
+
+def pw(xp: float, yp: float) -> tuple[float, float]:
+    return PW_SX * (xp + DX_PW), yp + DY_PW
+
+
 JOINT_Z_CLEAR = 0.20  # Designed vertical gap between each tongue landing and its socket roof
 
 
@@ -110,7 +118,7 @@ def load_dwg_plate_poly_world(target_w: float, target_h: float, y_shift_to_top: 
         seg = bulge_arc((v0["x"], v0["y"]), (v1["x"], v1["y"]), float(v0.get("bulge", 0.0)))
         pts.extend(seg[:-1])
     arr = np.asarray(pts, dtype=np.float64)
-    world = np.column_stack([arr[:, 0] - x0 + DX_PW, arr[:, 1] - y0 + y_shift_to_top + DY_PW])
+    world = np.column_stack([PW_SX * (arr[:, 0] - x0 + DX_PW), arr[:, 1] - y0 + y_shift_to_top + DY_PW])
     if not sg.LinearRing(world).is_ccw:
         world = world[::-1]
     return world
@@ -210,7 +218,7 @@ def main() -> None:
     assert z_landing_ov > 1.0, f"Tongue landings do not bear by {JOINT_Z_CLEAR + 0.05:.2f} mm: {z_landing_ov} mm^3"
 
     # -----------------------------------------------------------------------
-    # 4. Staggered Back Seam (BR strike centre)
+    # 4. Staggered Back Seam (seam strike centre)
     # -----------------------------------------------------------------------
     seam = GEOM["back_seam"]
     seam_x, seam_gap, step_y = seam["x_world"], seam["gap"], seam["split_step_y_world"]
@@ -225,14 +233,14 @@ def main() -> None:
 
     z_strike = REPORT["calibrated_z_stack_mm"]["Z_strike_pocket_floor"]
     pilot_depth = GEOM["strike_pilot_depth"]
-    strike_centres_w = [(x + DX_PW, y + DY_PW) for x, y in GEOM["strike_centers_plate_frame"]]
-    br_x, br_y = min(strike_centres_w, key=lambda c: abs(c[0] - seam_x) + abs(c[1] - seam["key_y"]))
-    assert abs(br_x - seam_x) < 1e-6, (br_x, seam_x)
-    # Each half owns exactly one BR pilot: a ring around it, 1 mm under the strike pocket floor, is solid in that half only.
+    strike_centres_w = [pw(x, y) for x, y in GEOM["strike_centers_plate_frame"]]
+    sx_w, sy_w = min(strike_centres_w, key=lambda c: abs(c[0] - seam_x) + abs(c[1] - seam["key_y"]))
+    assert abs(sx_w - seam_x) < 1e-6, (sx_w, seam_x)
+    # Each half owns exactly one seam-strike pilot: a ring around it, 1 mm under the pocket floor, is solid in that half only.
     skin_l, skin_r = slice_material(left_mf, z_strike - 1.0), slice_material(right_mf, z_strike - 1.0)
     pilot_owner: dict[str, list[float]] = {}
-    for side, px in (("left_pilot", br_x - 6.5), ("right_pilot", br_x + 6.5)):
-        ring = sg.Point(px, br_y).buffer(1.6).difference(sg.Point(px, br_y).buffer(0.95))
+    for side, px in (("left_pilot", sx_w - 6.5), ("right_pilot", sx_w + 6.5)):
+        ring = sg.Point(px, sy_w).buffer(1.6).difference(sg.Point(px, sy_w).buffer(0.95))
         pilot_owner[side] = [round(ring.intersection(skin_l).area / ring.area, 3), round(ring.intersection(skin_r).area / ring.area, 3)]
     assert pilot_owner["left_pilot"][0] > 0.95 and pilot_owner["left_pilot"][1] < 0.01, pilot_owner
     assert pilot_owner["right_pilot"][1] > 0.95 and pilot_owner["right_pilot"][0] < 0.01, pilot_owner
@@ -243,11 +251,11 @@ def main() -> None:
     pilot_open = [round(p.intersection(full_open).area / p.area, 3) for p in pilots]
     pilot_capped = [round(p.intersection(full_skin).area / p.area, 3) for p in pilots]
     assert max(pilot_open) < 0.01 and min(pilot_capped) > 0.95, (pilot_open, pilot_capped)
-    # The BR strike plate (20.5 x 6.55 mm) bears on the pocket floor of both halves.
-    br_plate = sg.box(br_x - 10.25, br_y - 3.275, br_x + 10.25, br_y + 3.275)
+    # The seam strike plate (20.5 x 6.55 mm) bears on the pocket floor of both halves.
+    seam_plate = sg.box(sx_w - 10.25, sy_w - 3.275, sx_w + 10.25, sy_w + 3.275)
     floor_l, floor_r = slice_material(left_mf, z_strike - 0.05), slice_material(right_mf, z_strike - 0.05)
-    strike_bearing = [round(br_plate.intersection(floor_l).area, 1), round(br_plate.intersection(floor_r).area, 1)]
-    assert min(strike_bearing) > 40.0, f"BR strike plate does not bear on both halves: {strike_bearing} mm^2"
+    strike_bearing = [round(seam_plate.intersection(floor_l).area, 1), round(seam_plate.intersection(floor_r).area, 1)]
+    assert min(strike_bearing) > 40.0, f"Seam strike plate does not bear on both halves: {strike_bearing} mm^2"
     # Side faces line-to-line (owner): the wedge key sides lock Y and the end faces meet across the back seam, so a
     # 0.05 mm shift of the LeftHalf either way along Y, or toward the RightHalf along X, already collides there.
     seam_box = md.Manifold.cube([16.0, 210.0 - step_y, 30.0]).translate([seam_x - 8.0, step_y, -2.0])
@@ -317,11 +325,11 @@ def main() -> None:
     z_strike, z_floor, z_lip = levels["Z_strike_pocket_floor"], levels["Z_base_pocket_floor"], levels["Z_outer_skirt_lip"]
     z_relief = levels["Z_plate_relief_floor"]
     assert abs(z_relief - z_gasket) < 1e-9, f"Plate relief {z_relief} must sit at the cap-pocket level {z_gasket}"
-    cap_pockets_w = [sg.Polygon([(x + DX_PW, y + DY_PW) for x, y in poly]) for poly in levels["cap_pocket_polys_plate_frame"]]
+    cap_pockets_w = [sg.Polygon([pw(x, y) for x, y in poly]) for poly in levels["cap_pocket_polys_plate_frame"]]
     rx0, ry0, rx1, ry1 = levels["plate_relief_box_plate_frame"]
-    relief_w = sg.box(rx0 + DX_PW, ry0 + DY_PW, rx1 + DX_PW, ry1 + DY_PW)
-    orange_w = sg.Polygon([(x + DX_PW, y + DY_PW) for x, y in levels["orange_cut_poly_plate_frame"]])
-    strikes_w = [(x + DX_PW, y + DY_PW) for x, y in GEOM["strike_centers_plate_frame"]]
+    relief_w = sg.Polygon([pw(rx0, ry0), pw(rx1, ry0), pw(rx1, ry1), pw(rx0, ry1)])
+    orange_w = sg.Polygon([pw(x, y) for x, y in levels["orange_cut_poly_plate_frame"]])
+    strikes_w = [pw(x, y) for x, y in GEOM["strike_centers_plate_frame"]]
 
     def material_at(z: float) -> sg.base.BaseGeometry:
         return slice_material(full_case_mf, z)
@@ -340,7 +348,7 @@ def main() -> None:
         for xLp, xRp in tabs_p:
             for cx_p in (xLp + 3.2, xRp - 3.2):
                 caps_mf += md.Manifold.cube([8.2, 4.0, 3.90], center=True).translate(
-                    [cx_p + DX_PW, y_wing_mid + DY_PW, 0.0]
+                    [*pw(cx_p, y_wing_mid), 0.0]
                 )
 
     plate_seated_ov = float((pc_plate_mf.translate([0, 0, z_plate]) ^ full_case_mf).volume())
@@ -393,7 +401,7 @@ def main() -> None:
         (0.475, 100.994),
     ]).buffer(0.18, join_style="mitre")
     kc_pts_w = np.column_stack([
-        np.asarray(kc_poly_p.exterior.coords[:-1])[:, 0] + DX_PW,
+        PW_SX * (np.asarray(kc_poly_p.exterior.coords[:-1])[:, 0] + DX_PW),
         np.asarray(kc_poly_p.exterior.coords[:-1])[:, 1] + DY_PW,
     ])
     if not sg.LinearRing(kc_pts_w).is_ccw:
@@ -402,9 +410,9 @@ def main() -> None:
     assert keycaps_ov < 0.01, f"Keycap array clearance < 0.58 mm per side: {keycaps_ov} mm^3"
 
     # 6e. Stock Base Pocket (caliper IMG_0333/0334): the stock bottom case nests in the 10.32 mm pocket from the skirt lip
-    #     down to the 9.69 mm floor, so the whole inner skirt (R5.0) must stay empty past the floor.
+    #     down to the 9.69 mm floor, so the whole inner skirt (report corner radius) must stay empty past the floor.
     #     shapely buffers return clockwise rings, which md.CrossSection fills as zero area; orient them CCW. The ring
-    #     sits 0.05 mm off the skirt face: the exported R5.0 skirt fillet facets sag up to 0.024 mm into the cavity.
+    #     sits 0.05 mm off the skirt face: the exported skirt fillet facets sag up to 0.024 mm into the cavity.
     ix0, iy0, ix1, iy1 = GEOM["inner_skirt_world"]
     ir = GEOM["inner_skirt_corner_r"]
     inner_skirt = sg.box(ix0 + ir, iy0 + ir, ix1 - ir, iy1 - ir).buffer(ir, quad_segs=24)
@@ -425,7 +433,7 @@ def main() -> None:
     # 6g. Short-side underside steps (caliper, from the outer edge): wall to 2.85, 9.69 ledge to 4.90, 6.30 strip to the
     #     keycap opening at 5.66. Probe both sides at three depths, 0.2 mm inside each band.
     material_lip, material_mid, material_top = material_at(z_floor + 2.0), material_at((z_gasket + z_floor) / 2), material_at(z_gasket - 0.3)
-    outer_x = GEOM["outer_plate_frame"][2] + DX_PW
+    outer_x = abs(pw(GEOM["outer_plate_frame"][2], 0.0)[0])  # outline symmetric about X = 0
     side_steps_ok: dict[str, bool] = {}
     for y_p in (40.0, 60.0, 80.0):
         for sgn in (-1.0, 1.0):
@@ -436,6 +444,24 @@ def main() -> None:
                 and material_top.contains(at(5.4)) and not material_top.contains(at(5.9))  # 6.30 strip to 5.65
             )
     assert all(side_steps_ok.values()), f"Short-side steps differ from the caliper 2.85 / 4.90 / 5.66: {side_steps_ok}"
+    # 6h. Chirality (v6.2 printed the mirror image). The print frame is the underside with the front at low Y, so the
+    #     keyboard's left (Esc side: USB-C notch, and the back-left gasket tab set 10 mm inward to clear it) is print +X.
+    back_line_y = GEOM["inner_skirt_world"][3] + 1.4
+    skirt = material_at(z_lip - 1.0).intersection(sg.LineString([(-160.0, back_line_y), (160.0, back_line_y)]))
+    ends = sorted(c for g in getattr(skirt, "geoms", [skirt]) for c in (g.bounds[0], g.bounds[2]))
+    notches = [(a, b) for a, b in zip(ends[1:-1:2], ends[2::2]) if b - a > 5.0]
+    assert len(notches) == 1 and notches[0][0] > 0.0, f"USB-C notch must be at print +X (keyboard left): {notches}"
+    mid_y = (GEOM["inner_skirt_world"][1] + GEOM["inner_skirt_world"][3]) / 2
+    back_outer = {("usb" if p.centroid.x > 0 else "far"): abs(p.centroid.x)
+                  for p in cap_pockets_w if p.centroid.y > mid_y and abs(p.centroid.x) > 50.0}
+    assert back_outer["far"] - back_outer["usb"] > 9.0, f"Back gasket pocket on the USB side must sit ~10 mm inward: {back_outer}"
+    usb_notch_x = [round(v, 2) for v in notches[0]]
+    usb = GEOM["usb_notch"]
+    assert abs((notches[0][1] - notches[0][0]) - usb["width"]) < 0.05, (notches, usb)
+    # Closed end: solid wall 0.2 mm short of `closed_end_zp`, open 0.2 mm past it (notch centre line).
+    usb_probe = sg.Point(usb["x_world"], back_line_y)
+    assert material_at(usb["closed_end_zp"] - 0.2).contains(usb_probe), usb
+    assert not material_at(usb["closed_end_zp"] + 0.2).contains(usb_probe), usb
 
     verification = {
         "status": "ALL_PASSED",
@@ -461,10 +487,11 @@ def main() -> None:
         },
         "back_seam": {
             "seam_faces_x_mm": seam_faces,
-            "br_pilot_ring_cover_left_right": pilot_owner,
+            "seam_strike": GEOM["back_seam_strike"],
+            "seam_strike_pilot_ring_cover_left_right": pilot_owner,
             "pilot_open_above_bottom": pilot_open,
             "pilot_capped_below_bottom": pilot_capped,
-            "br_strike_bearing_left_right_mm2": strike_bearing,
+            "seam_strike_bearing_left_right_mm2": strike_bearing,
             "key_side_shift_0p05mm_overlap_mm3": [round(v, 3) for v in key_y_lock],
             "end_face_push_0p05mm_overlap_mm3": round(end_face_contact, 3),
         },
@@ -476,6 +503,8 @@ def main() -> None:
         "cap_pocket_and_relief_overlap_above_6p30_mm3": round(orange_overlap, 5),
         "floor_cover_outside_declared_cuts": floor_cover,
         "short_side_steps_2p85_4p90_5p66": side_steps_ok,
+        "chirality_usb_notch_x_and_back_pocket_centres": {"usb_notch_x": usb_notch_x,
+                                                          "back_outer_pocket_abs_x": {k: round(v, 2) for k, v in back_outer.items()}},
         "strike_tongue_to_plate_gap_mm": tongue_plate_gap,
         "virtual_hardware_mating_mm3": {
             "dwg_6095_gas_pc_plate_seated": round(plate_seated_ov, 5),

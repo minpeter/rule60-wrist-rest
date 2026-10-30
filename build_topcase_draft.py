@@ -8,7 +8,7 @@ ball-catch pockets (IMG_0201..IMG_0222, 28 px/mm rectified):
   - CNC order as on the stock part (caliper; top face down = `Z_p 0`, `Z_p` grows toward the skirt lip):
       1. Block with the 6-deg top face + 0.70 mm 45-deg outer chamfer, skirt lip at `Z_p = 20.01 mm` (IMG_0333)
       2. Base pocket from the lip down to the `Z_p = 9.69 mm` floor (IMG_0334) inside the skirt (`2.85 mm` sides and back,
-         `2.80 mm` front; `R8.0` outer / `R5.0` inner corners); the stock bottom case nests in this 10.32 mm pocket.
+         `2.80 mm` front; `R4.85` outer / `R2.0` inner corners); the stock bottom case nests in this 10.32 mm pocket.
          Outline from the caliper-measured top-face bezels: 5.65 sides, 10.90 back, 11.02 front -> 298.10 x 117.37 mm
       3. HHKB keycap opening through the floor
       4. Plate-body relief + 6 open rounded-rectangle silicone-cap pockets, one level `Z_p = 6.30 mm` (caliper), cut
@@ -20,9 +20,9 @@ ball-catch pockets (IMG_0201..IMG_0222, 28 px/mm rectified):
          6.55 mm strike, stock CNC "mushroom" end reliefs (`4.1 mm` semicircular lobe on the skirt half `4.55 mm` past each
          plate end, interior-half end wall `2.15 mm` past it, `R0.85` shoulder; two-view fit of IMG_0218/0222), with
          `3.55 mm` deep M2 strike screw pilots; each keeps its fitted distance to the inner skirt wall it faces
-      6. USB-C notch. Gasket mount only: no top-mount screw holes.
+      6. USB-C notch (12.8 wide, 8.7 deep from the lip, R1.5 closed-end corners). Gasket mount only: no top-mount screws.
   - Staggered split into two X2D halves: X = 0 through the wrist rest and front bezel (3 dovetails); the back bezel runs
-    on in the LeftHalf to the back-right strike centre, where the stock strike plate (one M2 per half) and a wedge key
+    on in the LeftHalf to the back-left (BL) strike centre, where the stock strike plate (one M2 per half) and a wedge key
     join the back seam. Each male part keeps its 45-deg print ramp and the female side fills under it, so every joint
     closes over all faces with a 0.20 mm glue line and nothing needs support.
 
@@ -51,9 +51,11 @@ OUT = Path(__file__).resolve().parent / "topcase-draft"
 OUT.mkdir(exist_ok=True)
 
 # ---------------------------------------------------------------------------
-# Plate frame = DWG `6095(gas)` plate / HHKB keycap layout; the keycap opening is fixed in it. The outer case follows the
-# caliper-measured top-face bezels (owner, +-1 mm) and sits in the world frame centered on X = 0 with its front at
-# Y = WRIST_D: X_world = X_plate + DX_PW, Y_world = Y_plate + DY_PW.
+# Plate frame = DWG `6095(gas)` plate / HHKB keycap layout seen from the top (X right, Y back); the keycap opening is
+# fixed in it. The outer case follows the caliper-measured top-face bezels (owner, +-1 mm). The print frame is the
+# part upside down on the bed (top face at Z_p 0) seen from above, i.e. the underside: centred on X = 0, front at
+# Y = WRIST_D, and X mirrored: X_world = -(X_plate + DX_PW), Y_world = Y_plate + DY_PW. v6.2 and earlier skipped the
+# mirror and printed the mirror image (USB on the wrong side, back gasket pockets 10 mm off the tabs).
 # ---------------------------------------------------------------------------
 OPENING_P = (-0.45, 6.20, 286.35, 101.65)  # HHKB keycap opening bounds (plate frame); front edge = bottom-row middle
 BEZEL_SIDE, BEZEL_BACK, BEZEL_FRONT = 5.65, 10.90, 11.02  # Top-face bezel, outer edge to the opening (caliper)
@@ -71,6 +73,13 @@ CASE_D = round(OUTER_P[3] - OUTER_P[1], 3)  # 117.37
 WRIST_D = 80.00         # Integrated honeycomb wrist-rest depth
 DX_PW = round(-(OUTER_P[0] + OUTER_P[2]) / 2, 3)  # -142.95
 DY_PW = round(WRIST_D - OUTER_P[1], 3)            # 84.82
+PW_SX = -1.0            # Plate X -> print X sign (underside view)
+
+
+def pw(xp: float, yp: float) -> tuple[float, float]:
+    return round(PW_SX * (xp + DX_PW), 4), round(yp + DY_PW, 4)
+
+
 TILT_DEG = 6.0          # IC spec: 6.0 deg typing angle
 JUNC_H = 20.01          # Installed height of the top face at the Y=80 junction = stock top-case height (caliper 20.01 mm)
 
@@ -92,7 +101,7 @@ RELIEF_CORNER_R = 0.50  # Relief outer corners (0.35 mm from the plate edge)
 CAP_TOP_COMPRESSED = 1.20  # Silicone cap top flange: 1.5 mm free, 0.30 mm preload (unmeasured)
 Z_PLATE = round(Z_GASKET + CAP_TOP_COMPRESSED, 2)  # Seated gasket-plate top face (7.50 mm)
 Z_RELIEF = Z_GASKET     # Plate-body travel relief: same level as the cap pockets (owner), 1.20 mm plate travel
-KERNEL_WORKAROUND_P = (173.207, 2.250)  # Temporary bore site in the front-right floor face (plate frame), see step 10b
+KERNEL_WORKAROUND_W = (30.257, 87.070)  # Temporary bore site in the RightHalf front floor face (print frame), step 10b
 # Ball-catch strikes: (name, X_plate, inner skirt wall faced, center distance from that wall). Back pair: the distance
 # fitted to IMG_0218/0222 (kept when the measured outline moves the wall). Front pair: the measured front bezel narrows
 # the band between the inner wall and the gasket-plate edge to 7.6 mm, so they sit centred in it (0.63 mm pocket-to-wall
@@ -113,13 +122,15 @@ JOINTS_SPEC = [
     ("FrontBezelWallJoint",  JOINT_YC["FrontBezelWallJoint"], 5.00, 6.40, 6.0, 4.0, 17.6, 22.0, 4.8, 0.55),
 ]
 # Staggered split: the wrist rest, front bezel and keycap opening split at X = 0 (the 3 dovetails above); the back bezel
-# runs on in the LeftHalf to the centre of the back-right (BR) strike, so the stock strike plate (2 x M2 at 13.0 mm pitch)
-# bridges the back seam with one screw in each half, and the back-centre cap pocket stays in one piece. The step from
-# X = 0 to the back seam runs at `SPLIT_STEP_Y` through the keycap opening, where there is no material.
-BACK_SEAM_X = round(next(x for n, x, *_ in STRIKE_SITES if n == "BR") + DX_PW, 3)  # BR strike centre, world X (53.75)
+# runs on in the LeftHalf to the centre of the back strike on the +X side (the stock back-left, BL, in the underside
+# view), so the stock strike plate (2 x M2 at 13.0 mm pitch) bridges the back seam with one screw in each half, and the
+# back-centre cap pocket stays in one piece. The step from X = 0 to the back seam runs at `SPLIT_STEP_Y` through the
+# keycap opening, where there is no material.
+BACK_SEAM_STRIKE = next(n for n, x, wall, _ in STRIKE_SITES if wall == "back" and pw(x, 0.0)[0] > 0.0)
+BACK_SEAM_X = round(pw(next(x for n, x, *_ in STRIKE_SITES if n == BACK_SEAM_STRIKE), 0.0)[0], 3)  # world X (53.10)
 BACK_SEAM_GAP = 0.0     # End gap across the back seam: line-to-line, like every side face of the X = 0 dovetails (owner)
 SPLIT_STEP_Y = round((OPENING_P[1] + OPENING_P[3]) / 2 + DY_PW, 3)  # Mid keycap opening, world Y
-BACK_KEY_HW = 1.50      # Back-seam key half width (Y): a 45-deg wedge on the LeftHalf below the BR strike pocket floor
+BACK_KEY_HW = 1.50      # Back-seam key half width (Y): a 45-deg wedge on the LeftHalf below the seam strike pocket floor
 BACK_KEY_Z0 = 2.00      # Key underside at the seam face (Z_p); it rises at 45 deg to the strike pocket floor
 BACK_KEY_CLR_Y = 0.0    # Notch clearance per side (Y): line-to-line (owner); under the wedge the notch keeps
                         # `JOINT_Z_CLEAR` (vertical), like the dovetail landings and print ramps
@@ -132,9 +143,9 @@ def strike_centers_p() -> list[tuple[str, float, float]]:
 
 
 def back_seam_key() -> dict[str, Any]:
-    """World X/Y, Z_p of the back-seam wedge key (LeftHalf) and its notch (RightHalf), centred on the BR strike. The
+    """World X/Y, Z_p of the back-seam wedge key (LeftHalf) and its notch (RightHalf), centred on the seam strike. The
     notch is the wedge lowered by `JOINT_Z_CLEAR`: a uniform glue line under the slope, no void (`notch_xz`: X, Z_p)."""
-    _, _, by_p = next(s for s in strike_centers_p() if s[0] == "BR")
+    _, _, by_p = next(s for s in strike_centers_p() if s[0] == BACK_SEAM_STRIKE)
     key_y = round(by_p + DY_PW, 3)
     key_x0 = round(BACK_SEAM_X - BACK_SEAM_GAP / 2, 3)  # LeftHalf seam face
     key_tip_x = round(key_x0 + Z_STRIKE - BACK_KEY_Z0, 3)
@@ -194,24 +205,27 @@ FINE_LAYER_Z = (5.40, 10.00)  # Print Z band sliced at `FINE_LAYER_H` (layer_con
 FINE_LAYER_H = 0.10
 SKIN_T = 2.20           # Honeycomb wrist-rest top skin thickness
 WRIST_WALL = 2.20       # Wrist-rest outer perimeter wall thickness
-CORNER_R = 8.00         # Outer vertical corner fillet radius
-INNER_SKIRT_R = 5.00    # Concentric inner skirt corner radius
+CORNER_R = 4.85         # Outer vertical corner radius: concentric with the R2.0 inner skirt corner (+ 2.85 mm wall)
+INNER_SKIRT_R = 2.00    # Inner skirt (bottom-case pocket) vertical corner radius. The R5.0 of v6.2 held the stock bottom
+                        # case ~2.3 mm off its seat at the corners (owner, printed part): its corners are about
+                        # R5.0 - 2.3 = R2.7, so the pocket takes R2.0 to clear them with the straight walls line-to-line.
 RIB = 2.40              # Honeycomb rib width (matches v9)
 
-USB_X = round(19.35 + DX_PW, 3)  # Exact overlay USB-C center X_world = -123.60 mm
-USB_W = 14.2            # USB-C opening width
-USB_TOP_ZP = 12.10      # USB-C notch top, fixed relative to the PCB (independent of skirt height)
+USB_X = pw(19.35, 0.0)[0]  # USB-C centre: plate X 19.35 (stock back-left, Esc side) -> print X +123.60
+# Width and corner shape from the stock notch measured against the v6.2 print (owner photos IMG_0378/0379, scaled from
+# the printed 14.2 mm notch): 12.6 / 12.75 wide, rounded closed-end corners (CNC endmill); 0.1-0.2 mm generous. Depth
+# from the v7.3 full-print fit: the photo-estimated 5.7 mm hit the USB-C connector until the owner cut the notch ~3 mm
+# deeper by hand, so it is 8.7 mm (closed end 1.62 mm above the 9.69 floor).
+USB_W = 12.8            # USB-C notch width
+USB_TOP_ZP = round(SKIRT_H - 8.7, 2)  # USB-C notch closed end (Z_p 11.31): 8.70 mm deep from the skirt lip
 USB_DEPTH = round(SKIRT_H - USB_TOP_ZP, 2)  # USB-C notch depth from skirt lip
+USB_END_R = 1.50        # Closed-end corner radius (3 mm endmill); the lip-side corners stay sharp
 
 JOINT_CLEAR = 0.0       # Base dovetail socket clearance per face: line-to-line, as in the published v9 tight fit
 JOINT_Z_CLEAR = 0.20    # Vertical gap between each tongue landing and its socket roof, so both halves rest on the desk
 COMP_INTERF = 0.08      # Local interference per flank on chevron compression ribs
 
 TILT_RAD = math.radians(TILT_DEG)
-
-
-def pw(xp: float, yp: float) -> tuple[float, float]:
-    return round(xp + DX_PW, 4), round(yp + DY_PW, 4)
 
 
 def z_desk_in_print_frame(y: float) -> float:
@@ -336,14 +350,14 @@ def build_solidcraft_commands() -> list[dict[str, Any]]:
     add_param("skirt_wall", f"{SKIRT_WALL} mm", f"Skirt wall thickness, sides and back ({SKIRT_WALL:.2f} mm, caliper)")
     add_param("front_wall", f"{FRONT_WALL} mm", f"Skirt wall thickness, front ({FRONT_WALL:.2f} mm, caliper)")
     add_param("wrist_wall", f"{WRIST_WALL} mm", "Wrist-rest perimeter wall thickness")
-    add_param("corner_r", f"{CORNER_R} mm", "Outer vertical corner fillet radius (8.0 mm)")
-    add_param("usb_x", f"{USB_X} mm", "USB-C center X (-123.60 mm)")
-    add_param("usb_w", f"{USB_W} mm", "USB-C opening width (14.20 mm)")
+    add_param("corner_r", f"{CORNER_R} mm", f"Outer vertical corner fillet radius ({CORNER_R:.2f} mm)")
+    add_param("usb_x", f"{USB_X} mm", f"USB-C center X ({USB_X:.2f} mm)")
+    add_param("usb_w", f"{USB_W} mm", f"USB-C opening width ({USB_W:.2f} mm)")
     add_param("usb_depth", f"{USB_DEPTH} mm", f"USB-C notch depth from skirt lip ({USB_DEPTH:.2f} mm, top at Z_p {USB_TOP_ZP:.2f})")
     add_param("joint_clear", f"{JOINT_CLEAR} mm", "Base dovetail clearance per face")
     add_param("joint_z_clear", f"{JOINT_Z_CLEAR} mm", "Vertical tongue-landing to socket-roof clearance")
 
-    # 2. Main Unibody Envelope + R=8.0 mm Outer Corner Fillets
+    # 2. Main Unibody Envelope + `CORNER_R` Outer Corner Fillets (wrist-rest front and case back corners)
     cmds.extend([
         {
             "command": "solid.box",
@@ -554,7 +568,7 @@ def build_solidcraft_commands() -> list[dict[str, Any]]:
     # 10b. SolidCraft v0.22.0 boolean workaround, part 1: with no inner loop in the front-right floor face, the first
     #      RightHalf joint-socket cut leaves a zero-width slit at X = 25.965, drops the front top chamfer up to that slit
     #      and loses ~38 mm^3 of wrist material. A temporary bore here avoids it; part 2 refills it after the joints.
-    wa_x, wa_y = pw(*KERNEL_WORKAROUND_P)
+    wa_x, wa_y = KERNEL_WORKAROUND_W
     cmds.extend([
         {"command": "sketch.create", "params": {"plane": "XY", "offset": "z_floor - 3.8 mm", "name": "KernelWorkaroundBoreSk"}},
         {"command": "sketch.circle.center", "params": {"center": [wa_x, wa_y], "radius": 1.00}},
@@ -572,19 +586,23 @@ def build_solidcraft_commands() -> list[dict[str, Any]]:
         },
     ])
 
-    # 11. USB-C Open Top Notch on Back Skirt Wall (`X_world = -123.60 mm`, width `14.2 mm`, top at `Z_p = 12.10 mm`)
-    cmds.append({
-        "command": "solid.box",
-        "params": {
-            "length": "usb_w",
-            "width": "skirt_wall + 4 mm",
-            "height": "usb_depth + 2 mm",
-            "center": ["usb_x", "wrist_d + case_d - skirt_wall/2", "skirt_h - usb_depth/2 + 1 mm"],
-            "operation": "cut",
-            "targets": ["Unibody"],
-            "name": "USBCutout",
+    # 11. USB-C notch through the back skirt wall: open at the lip, `USB_END_R` corners at its closed end (Z_p
+    #     `USB_TOP_ZP`). XZ sketch coordinates are (X, -Z_p); the profile runs 1 mm past the lip and is cut through the wall.
+    usb_xz = sg.box(USB_X - USB_W / 2, USB_TOP_ZP, USB_X + USB_W / 2, SKIRT_H + 1.0)
+    usb_xz = usb_xz.buffer(-USB_END_R).buffer(USB_END_R, quad_segs=12).union(
+        sg.box(USB_X - USB_W / 2, USB_TOP_ZP + USB_END_R, USB_X + USB_W / 2, SKIRT_H + 1.0)).simplify(1e-4)
+    usb_sk = sg.Polygon([(x, -z) for x, z in usb_xz.exterior.coords[:-1]])
+    back_inner_y = round(WRIST_D + CASE_D - SKIRT_WALL, 3)
+    cmds.extend([
+        {"command": "sketch.create", "params": {"plane": "XZ", "offset": str(round(back_inner_y - 1.0, 3)), "name": "USBNotchSk"}},
+        {"command": "sketch.line", "params": {"points": poly_to_pts(usb_sk)}},
+        {"command": "sketch.finish", "params": {}},
+        {
+            "command": "solid.extrude",
+            "params": {"sketch": "USBNotchSk", "distance": round(SKIRT_WALL + 2.0, 3), "operation": "cut",
+                       "targets": ["Unibody"], "name": "USBCutout"},
         },
-    })
+    ])
 
     # 12. Wrist-Rest Symmetric Interior Hollows (contoured around 8 bumpon pad ledges) + Right-Side Undercut Boss Strip
     w_in_x = round(CASE_W / 2 - WRIST_WALL, 3)
@@ -831,7 +849,7 @@ def build_solidcraft_commands() -> list[dict[str, Any]]:
              "params": {"target": "RightHalf", "tools": [f"{jname}SocketFill"], "operation": "join"}},
         ])
 
-    # 15c. Back seam: Y alignment from a 45-deg wedge key on the LeftHalf under the BR strike pocket floor, sliding down
+    # 15c. Back seam: Y alignment from a 45-deg wedge key on the LeftHalf under the seam strike pocket floor, sliding down
     #      with the dovetails into a matching notch in the RightHalf (the wedge lowered by `JOINT_Z_CLEAR`) that opens
     #      into the strike pocket. X and Z across the seam come from the stock strike plate screwed into both halves.
     #      The key root sinks 0.3 mm into the LeftHalf.
@@ -1061,7 +1079,7 @@ def main() -> None:
 
     # Corner coupon starts at the wrist junction (Y = wrist_d) so it carries no loose strip of palm rest.
     catch_coupon_mf = left_mf ^ md.Manifold.cube([115.0, 42.0, 25.0]).translate([-149.5, WRIST_D, -0.5])
-    # Back-seam pair: the split BR strike pocket with one pilot per half, the wedge key and its notch (fits the strike).
+    # Back-seam pair: the split seam strike pocket with one pilot per half, the wedge key and its notch (fits the strike).
     back_sL_mf = left_mf ^ md.Manifold.cube([24.0, 16.0, 25.0]).translate([BACK_SEAM_X - 19.0, 184.0, -0.5])
     back_sR_mf = right_mf ^ md.Manifold.cube([20.0, 16.0, 25.0]).translate([BACK_SEAM_X - 1.0, 184.0, -0.5])
     front_jL_mf = left_mf ^ md.Manifold.cube([30.0, 66.0, 25.0]).translate([-15.0, 18.0, -0.5])
@@ -1092,7 +1110,7 @@ def main() -> None:
     )
 
     report = {
-        "version": "v6.2-line-to-line-back-seam",
+        "version": "v7.4-usb-notch-8p7",
         "generator": "SolidCraft v0.22.0 parametric timeline + 28px/mm gasket metrology",
         "solidcraft_design": str(design_path.relative_to(Path(__file__).resolve().parent)),
         "step_export": str(step_path.relative_to(Path(__file__).resolve().parent)),
@@ -1130,10 +1148,15 @@ def main() -> None:
         },
         "geometry_mm": {
             "plate_to_world_offset": [DX_PW, DY_PW],
+            "plate_to_world_x_sign": PW_SX,
             "outer_plate_frame": list(OUTER_P),
-            "inner_skirt_world": [round(INNER_P[0] + DX_PW, 3), round(INNER_P[1] + DY_PW, 3),
-                                  round(INNER_P[2] + DX_PW, 3), round(INNER_P[3] + DY_PW, 3)],
+            "inner_skirt_world": [round(-(INNER_P[2] - INNER_P[0]) / 2, 3), round(INNER_P[1] + DY_PW, 3),
+                                  round((INNER_P[2] - INNER_P[0]) / 2, 3), round(INNER_P[3] + DY_PW, 3)],
+            "back_seam_strike": BACK_SEAM_STRIKE,
+            "usb_notch": {"x_world": USB_X, "width": USB_W, "closed_end_zp": USB_TOP_ZP, "depth_from_lip": USB_DEPTH,
+                          "closed_end_corner_r": USB_END_R},
             "inner_skirt_corner_r": INNER_SKIRT_R,
+            "outer_corner_r": CORNER_R,
             "floor_ledge_width": RIM_SEAT_W,
             "strike_centers_plate_frame": [[x, y] for _, x, y in strike_centers_p()],
             "joint_yc_world": JOINT_YC,

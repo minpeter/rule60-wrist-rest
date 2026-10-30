@@ -154,10 +154,22 @@ ball-catch pockets follow photo metrology of the same part.
 Renders are CAD illustrations (left half grey, right half blue), not print
 photos.
 
-**Status: not yet test-fitted as a full print.** An earlier corner coupon
-([photos](evidence/topcase/README.md#photos)) confirmed joint positions,
-ball-catch engagement and screw-hole size; the outline and Z levels were
-re-measured after that test.
+**Status: one full print test-fitted.** The owner's v7.3 print assembled on
+the stock bottom case, plate and gaskets after the USB-C notch was cut about
+3 mm deeper by hand; v7.4 makes that change in the model (the left half is
+unchanged from v7.3). Fixes found by printing:
+
+- **v7.0:** v6.2 and earlier printed the mirror image: the DWG plate frame is a
+  top view, the print frame the underside. The USB-C notch came out on the
+  wrong side and the two outer back gasket pockets sat ~10 mm off their tabs.
+  The verification now checks the USB-C side and the inward back-left pocket.
+- **v7.1–v7.3:** bottom-case pocket corners R5.0 → R2.0 (the R5.0 held the
+  stock bottom case ~2.3 mm off at the corners); outer corners R8.0 → R4.85,
+  concentric with them; USB-C notch 12.8 mm wide with R1.5 corners, from the
+  stock notch photographed against the print.
+- **v7.4:** USB-C notch 8.7 mm deep from the lip.
+
+[Fit photos](evidence/topcase/README.md#photos) are in the evidence folder.
 
 | File | Use |
 | --- | --- |
@@ -169,8 +181,9 @@ re-measured after that test.
 Assembled: **298.1 × 198.3 mm**, 20.01 mm case height. The halves split at the
 centre through the wrist rest and front bezel, joined by three sliding
 dovetails with compression ribs. The back bezel continues on the left half to
-the back-right ball-catch strike, whose stock plate bridges the back seam with
-one M2 screw in each half; a wedge key aligns that seam. Every joint side face
+the back-left ball-catch strike (the one nearest the USB-C side of centre),
+whose stock plate bridges the back seam with one M2 screw in each half; a wedge
+key aligns that seam. Every joint side face
 is line-to-line (0 mm); the dovetail landings and the faces under each 45°
 print ramp keep a 0.20 mm vertical glue line. Use epoxy or gel cyanoacrylate.
 Strike-plate screws must not exceed **5.0 mm under the head** (1.45 mm plate +
@@ -188,9 +201,9 @@ These 3MFs include a Bambu Studio / Orca **height-range modifier: 0.10 mm
 layers from Z 5.4 to 10.0 mm**. At 0.20 mm the 6.30 mm gasket-cap floor
 prints at 6.4 and the 9.69 mm bottom-case seat at 9.6, pinching the caps
 0.19 mm more; with the range they print at 6.3 and 9.7. Confirm the range in
-the object list after opening. Bambu Studio CLI estimates: left 4 h 14 min,
-right 3 h 46 min, coupons 1 h 48 min. The CLI slice reported ZFiller
-diagnostics.
+the object list after opening. Bambu Studio CLI estimates (v7.4): left
+4 h 15 min / 75 g, right 3 h 47 min / 65 g, coupons 1 h 47 min / 33 g. The CLI
+slice reported ZFiller diagnostics.
 
 ### Reproduce
 
@@ -226,15 +239,19 @@ path with contact only on the compression ribs, 0 mm side faces and 0.20 mm
 glue lines, the back-seam strike screws, layer islands and flat overhangs, and
 virtual stock parts: the DWG plate through 0.25 mm upward flex, 12 caps,
 four strikes, 60 HHKB keycaps through full travel and the stock bottom-case
-pocket. The same checks also pass on both halves rebuilt at the printed layer
-heights, with the strikes seated on their 5.6 mm printed floor.
+pocket, and the USB-C notch side, width and depth. Rebuilt at the printed
+layer heights, the same checks pass except one: the wedge-key tip's top
+0.10 mm layer reaches 0.05 mm into the notch layer below it, so the key tip
+bears after ~0.15 mm of the 0.20 mm vertical glue line instead of 0.20 mm
+([as-printed check](evidence/topcase/checks/as-printed-check.json)).
 
 Not covered: the stock bottom case was not measured (its pocket copies the
-stock top case); the front ball-catch strikes are centred in the available
-band, not measured; cap size is photo-derived and the front caps clear their
-pocket wall by only 0.08 mm; the stock plate is assumed to match the DWG.
-Clearance to the plate (0.30 mm per side) and keycaps (0.32 mm) tolerates up
-to about 0.2% print shrinkage.
+stock top case, its corner radius comes from the v6.2 fit); the front
+ball-catch strikes are centred in the available band, not measured; cap size
+is photo-derived and the front caps clear their pocket wall by only 0.07 mm;
+the stock plate is assumed to match the DWG; the outer corner radius is not
+measured. Clearance to the plate (0.30 mm per side) and keycaps (0.32 mm)
+tolerates up to about 0.2% print shrinkage.
 
 ## License and design history
 

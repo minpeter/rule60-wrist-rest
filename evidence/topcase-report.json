@@ -1,5 +1,5 @@
 {
-  "version": "v6.2-line-to-line-back-seam",
+  "version": "v7.4-usb-notch-8p7",
   "generator": "SolidCraft v0.22.0 parametric timeline + 28px/mm gasket metrology",
   "solidcraft_design": "topcase-draft/rule60-hhkb-unibody-draft.solidcraft",
   "step_export": "topcase-draft/rule60-hhkb-unibody-draft.step",
@@ -4002,6 +4002,7 @@
       -142.95,
       84.82
     ],
+    "plate_to_world_x_sign": -1.0,
     "outer_plate_frame": [
       -6.1,
       -4.82,
@@ -4014,7 +4015,16 @@
       146.2,
       194.52
     ],
-    "inner_skirt_corner_r": 5.0,
+    "back_seam_strike": "BL",
+    "usb_notch": {
+      "x_world": 123.6,
+      "width": 12.8,
+      "closed_end_zp": 11.31,
+      "depth_from_lip": 8.7,
+      "closed_end_corner_r": 1.5
+    },
+    "inner_skirt_corner_r": 2.0,
+    "outer_corner_r": 4.85,
     "floor_ledge_width": 2.05,
     "strike_centers_plate_frame": [
       [
@@ -4040,29 +4050,29 @@
       "FrontBezelWallJoint": 75.5
     },
     "back_seam": {
-      "x_world": 53.75,
+      "x_world": 53.1,
       "gap": 0.0,
       "split_step_y_world": 138.745,
       "key_half_width": 1.5,
       "key_underside_z_at_seam": 2.0,
       "notch_clearance_y_per_side": 0.0,
       "notch_clearance_under_wedge_vertical": 0.2,
-      "key_y": 190.22,
-      "key_x0": 53.75,
-      "key_tip_x": 57.3,
-      "notch_y0": 188.72,
-      "notch_y1": 191.72,
+      "key_y": 190.37,
+      "key_x0": 53.1,
+      "key_tip_x": 56.65,
+      "notch_y0": 188.87,
+      "notch_y1": 191.87,
       "notch_xz": [
         [
-          53.45,
+          52.8,
           1.5
         ],
         [
-          58.0,
+          57.35,
           6.05
         ],
         [
-          53.45,
+          52.8,
           6.05
         ]
       ]
@@ -4095,9 +4105,9 @@
   "bodies": [
     {
       "name": "RightHalf",
-      "volume_mm3": 78673.67,
+      "volume_mm3": 78625.14,
       "mass_petg_g": 99.9,
-      "faces": 1543,
+      "faces": 1566,
       "print_plate_bounds_mm": [
         [
           53.47,
@@ -4105,7 +4115,7 @@
           0.0
         ],
         [
-          202.52,
+          202.53,
           226.68,
           20.12
         ]
@@ -4113,17 +4123,17 @@
     },
     {
       "name": "LeftHalf",
-      "volume_mm3": 90033.41,
-      "mass_petg_g": 114.3,
+      "volume_mm3": 90455.29,
+      "mass_petg_g": 114.9,
       "faces": 1710,
       "print_plate_bounds_mm": [
         [
-          24.83,
+          25.15,
           29.32,
           0.0
         ],
         [
-          231.17,
+          230.85,
           226.68,
           20.12
         ]
@@ -4137,10 +4147,10 @@
   ],
   "verification": {
     "watertight": true,
-    "compression_rib_intentional_interference_mm3": 0.514,
+    "compression_rib_intentional_interference_mm3": 0.512,
     "disengaged_overlap_mm3": 0.0,
-    "blocked_x_separation_1mm_overlap_mm3": 79.87,
-    "blocked_z_overtravel_0p3mm_past_clearance_overlap_mm3": 61.894,
+    "blocked_x_separation_1mm_overlap_mm3": 79.869,
+    "blocked_z_overtravel_0p3mm_past_clearance_overlap_mm3": 61.892,
     "dovetail_z_stop_clearance_mm": 0.2,
     "fits_bambu_x2d_256x256": true,
     "supports_required": false
