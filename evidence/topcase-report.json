@@ -1,5 +1,5 @@
 {
-  "version": "v7.5-bumpon-pads-11mm",
+  "version": "v7.6-sj5012-pockets",
   "generator": "SolidCraft v0.22.0 parametric timeline + 28px/mm gasket metrology",
   "solidcraft_design": "topcase-draft/rule60-hhkb-unibody-draft.solidcraft",
   "step_export": "topcase-draft/rule60-hhkb-unibody-draft.step",
@@ -4102,45 +4102,49 @@
       }
     ],
     "bumpon_pads": {
-      "bumpon": "3M Bumpon SJ5302",
-      "bumpon_diameter": 7.9,
-      "bumpon_diameter_max": 8.4,
-      "pad_w": 14.0,
-      "pad_d": 11.0,
+      "bumpon": "3M Bumpon SJ5012",
+      "bumpon_diameter": 12.7,
+      "bumpon_diameter_max": 13.2,
+      "bumpon_height": 3.5,
+      "desk_gap": 2.0,
+      "pocket_d": 13.6,
+      "pocket_depth": 1.5,
+      "pad_w": 16.0,
+      "pad_d": 16.0,
       "column_d": 6.0,
-      "tip_land": 1.0,
+      "tip_land": 2.5,
       "centres_world": [
         [
           -30.0,
-          5.5
+          8.0
         ],
         [
           30.0,
-          5.5
+          8.0
         ],
         [
           -119.0,
-          5.5
+          8.0
         ],
         [
           119.0,
-          5.5
+          8.0
         ],
         [
           -30.0,
-          74.5
+          72.0
         ],
         [
           30.0,
-          74.5
+          72.0
         ],
         [
           -119.0,
-          74.5
+          72.0
         ],
         [
           119.0,
-          74.5
+          72.0
         ]
       ],
       "desk_plane_zp_at_y0": 11.711881852811848,
@@ -4150,9 +4154,9 @@
   "bodies": [
     {
       "name": "RightHalf",
-      "volume_mm3": 79605.14,
-      "mass_petg_g": 101.1,
-      "faces": 1574,
+      "volume_mm3": 82936.99,
+      "mass_petg_g": 105.3,
+      "faces": 1865,
       "print_plate_bounds_mm": [
         [
           53.47,
@@ -4168,9 +4172,9 @@
     },
     {
       "name": "LeftHalf",
-      "volume_mm3": 91435.29,
-      "mass_petg_g": 116.1,
-      "faces": 1718,
+      "volume_mm3": 94767.14,
+      "mass_petg_g": 120.4,
+      "faces": 2009,
       "print_plate_bounds_mm": [
         [
           25.15,
@@ -4193,7 +4197,7 @@
   "verification": {
     "watertight": true,
     "compression_rib_intentional_interference_mm3": 0.512,
-    "disengaged_overlap_mm3": 0.0,
+    "disengaged_overlap_mm3": -0.0,
     "blocked_x_separation_1mm_overlap_mm3": 79.869,
     "blocked_z_overtravel_0p3mm_past_clearance_overlap_mm3": 61.892,
     "dovetail_z_stop_clearance_mm": 0.2,

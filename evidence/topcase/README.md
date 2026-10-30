@@ -35,7 +35,8 @@ increasing toward the skirt lip.
 | — | Outer corners looked too round against R2.0 inside (owner request) | v7.3: outer R8.0 → R4.85, concentric (uniform 2.85 mm wall) |
 | v7.3 | Assembles; USB-C connector hit the notch until it was cut ~3 mm deeper by hand | v7.4: notch 5.7 → 8.7 mm deep from the lip; left half unchanged |
 | v7.4 | Right half (the only changed part) printed; no major issues reported | — |
-| v7.4 | Both halves printed and assembled; joints fit well. The wrist rest feels slightly raised and creaks when pressed (owner, 2026-10-30), likely the ~2 mm the stock bottom-case feet lift the keyboard (estimated, not measured). Fix chosen: 3M SJ5302 bumpons (Ø7.9 × 2.2 mm) under the wrist rest, but a centred one hung ~1 mm past the 6 mm pads | v7.5: the 8 pads run 11 mm in (6 mm full height + 45° corbel); `bumpon_pads_d8p4` checks an Ø8.4 mm bumpon lies flat on each pad, ≥ 1 mm from every edge |
+| v7.4 | Both halves printed and assembled; joints fit well. The wrist rest feels slightly raised and creaks when pressed (owner, 2026-10-30), likely the ~2 mm the stock bottom-case feet lift the keyboard (estimated, not measured). Fix chosen: 3M SJ5302 bumpons (Ø7.9 × 2.2 mm) under the wrist rest, but a centred one hung ~1 mm past the 6 mm pads | v7.5 (not printed): the 8 pads run 11 mm in (6 mm full height + 45° corbel) |
+| — | Owner also bought 3M SJ5012 (Ø12.7 × 3.5 mm flat top) and asked for the pads to take that type instead, for stability | v7.6: 16 × 16 mm pads with a Ø13.6 × 1.5 mm pocket square to the desk plane (2.0 mm proud, the estimated gap); `bumpon_pockets_sj5012` checks an Ø13.2 mm bumpon fits each pocket, bears on its whole floor with ≥ 1 mm of material under it, and keeps ≥ 1 mm of wall (1.2 mm) to every pad edge |
 
 Readings not used:
 
@@ -96,14 +97,14 @@ strikes are nearly symmetric, so it could not reveal the v6.2 mirror image.
 | [ball-catch-analysis.json](analysis/ball-catch-analysis.json) | Strike/catch positions and hardware size estimates |
 | [dwg-source-manifest.json](analysis/dwg-source-manifest.json) | Source URLs and SHA-256 of the downloaded Rule60 drawings |
 
-## Checks (v7.5)
+## Checks (v7.6)
 
 | File | Content |
 | --- | --- |
 | [../topcase-verification.json](../topcase-verification.json) | `verify_topcase.py` output on the exported halves |
 | [../topcase-report.json](../topcase-report.json) | Build report: Z stack, pocket outlines, back seam, dovetails, USB-C notch |
-| [checks/as-printed-check.json](checks/as-printed-check.json) | v7.4: same checks on both halves rebuilt at the printed layer heights, plan clearances to the stock parts, slicer estimates. One finding: the wedge-key tip bears after ~0.15 mm of its 0.20 mm vertical glue line. v7.5 changed only the wrist-rest bumpon pads, away from every joint and stock part. |
-| [checks/seams-v7.4.png](checks/seams-v7.4.png) | Split line, back-seam plan at the BL strike, and sections through the 3 dovetails and the wedge key (unchanged in v7.5) |
+| [checks/as-printed-check.json](checks/as-printed-check.json) | v7.4: same checks on both halves rebuilt at the printed layer heights, plan clearances to the stock parts, slicer estimates. One finding: the wedge-key tip bears after ~0.15 mm of its 0.20 mm vertical glue line. v7.5 and v7.6 changed only the wrist-rest bumpon pads, away from every joint and stock part. |
+| [checks/seams-v7.4.png](checks/seams-v7.4.png) | Split line, back-seam plan at the BL strike, and sections through the 3 dovetails and the wedge key (unchanged since v7.4) |
 
 `as-printed-check.json` and the seam image were produced during the design
 session, not by `build_topcase_draft.py`; regenerate them by hand if the

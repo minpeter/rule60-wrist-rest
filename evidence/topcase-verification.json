@@ -20,7 +20,7 @@
     "shear_y_plus_0p5mm": 86.206,
     "shear_y_minus_0p5mm": 84.471,
     "overtravel_z_stop_0p3mm_past_clearance": 61.892,
-    "clean_release_dz_18mm": 0.0
+    "clean_release_dz_18mm": -0.0
   },
   "dovetail_z_stop_clearance": {
     "design_mm": 0.2,
@@ -132,8 +132,8 @@
       "far": 105.05
     }
   },
-  "bumpon_pads_d8p4": {
-    "cover": [
+  "bumpon_pockets_sj5012": {
+    "floor_cover": [
       1.0,
       1.0,
       1.0,
@@ -143,15 +143,35 @@
       1.0,
       1.0
     ],
-    "edge_margin_mm": [
-      1.325,
-      1.325,
-      1.325,
-      1.325,
-      1.325,
-      1.325,
-      1.325,
-      1.325
+    "floor_1mm_cover": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "pocket_intrusion_mm2": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "wall_mm": [
+      1.2,
+      1.2,
+      1.2,
+      1.2,
+      1.2,
+      1.2,
+      1.2,
+      1.2
     ],
     "proud_of_desk_mm2": [
       0.0,
@@ -162,6 +182,9 @@
       0.0,
       0.0,
       0.0
+    ],
+    "bumpon_protrusion_mm": [
+      2.0
     ]
   },
   "strike_tongue_to_plate_gap_mm": [

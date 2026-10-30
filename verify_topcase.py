@@ -22,8 +22,8 @@ Verifies exported CAD files (not in-memory construction) across 6 independent su
        - Stock base pocket: empty from the 9.69 mm floor to the skirt lip inside the skirt (bottom-case seat); the frame
          at the 9.69 mm floor (IMG_0334) outside the declared cuts
        - Chirality: USB-C notch at print +X (keyboard left in the underside view) with the inward back-left gasket pocket
-       - 8 bumpon pads: a max-size 3M SJ5302 (`Ø8.4 mm`) centred on each pad lies flat on the desk-plane pad face,
-         >= 1 mm inside every pad edge
+       - 8 bumpon pockets: a max-size 3M SJ5012 (`Ø13.2 mm`) fits each, sits wholly on a floor `pocket_depth` below the
+         desk-plane pad face with >= 1 mm of floor under it, and keeps >= 1 mm of wall to every pad edge
   Z levels come from `draft-report.json` (`calibrated_z_stack_mm`), written by the build.
 
 Usage:
@@ -464,23 +464,37 @@ def main() -> None:
     usb_probe = sg.Point(usb["x_world"], back_line_y)
     assert material_at(usb["closed_end_zp"] - 0.2).contains(usb_probe), usb
     assert not material_at(usb["closed_end_zp"] + 0.2).contains(usb_probe), usb
-    # 6i. Bumpon pads (3M SJ5302): turned so the desk plane is level, a max-size bumpon disk centred on each of the 8
-    #     pads lies wholly on material just inside the pad face (flat, inside the outline, >= 1 mm to every pad edge),
-    #     and nothing stands proud of the desk plane over it.
+    # 6i. Bumpon pockets (3M SJ5012): turned so the desk plane is level (the pocket axis vertical), on each of the 8 pads
+    #     a max-size bumpon disk fits the empty pocket, sits wholly on its floor at `pocket_depth` with >= 1 mm of floor
+    #     under it, the pocket keeps >= 1 mm of wall to every pad edge at the pad face, and nothing stands proud of the
+    #     desk plane over the pad.
     pads = GEOM["bumpon_pads"]
     tilt = math.radians(pads["desk_plane_tilt_deg"])
     desk_mf = full_case_mf.rotate([-pads["desk_plane_tilt_deg"], 0.0, 0.0])  # (y, z) -> (y cos + z sin, z cos - y sin)
     z_desk = pads["desk_plane_zp_at_y0"] * math.cos(tilt)
-    pad_face, past_desk = slice_material(desk_mf, z_desk - 0.05), slice_material(desk_mf, z_desk + 0.05)
-    pad_cover, pad_margin, pad_proud = [], [], []
+    z_pocket_floor = z_desk - pads["pocket_depth"]
+    levels_6i = {"face": z_desk - 0.05, "past_desk": z_desk + 0.05, "in_pocket": z_pocket_floor + 0.05,
+                 "floor": z_pocket_floor - 0.05, "floor_1mm": z_pocket_floor - 1.0}
+    mat_6i = {k: slice_material(desk_mf, z) for k, z in levels_6i.items()}
+    r_bumpon, r_pocket = pads["bumpon_diameter_max"] / 2, pads["pocket_d"] / 2
+    pocket_gauge: dict[str, list[float]] = {k: [] for k in ("floor_cover", "floor_1mm_cover", "pocket_intrusion_mm2",
+                                                            "wall_mm", "proud_of_desk_mm2")}
     for x, y in pads["centres_world"]:
         z = pads["desk_plane_zp_at_y0"] + y * math.tan(tilt)
         centre = sg.Point(x, y * math.cos(tilt) + z * math.sin(tilt))
-        disk = centre.buffer(pads["bumpon_diameter_max"] / 2, quad_segs=32)
-        pad_cover.append(round(disk.intersection(pad_face).area / disk.area, 4))
-        pad_margin.append(round(pad_face.boundary.distance(centre) - pads["bumpon_diameter_max"] / 2, 3))
-        pad_proud.append(round(disk.intersection(past_desk).area, 4))
-    assert min(pad_cover) > 0.999 and min(pad_margin) >= 1.0 and max(pad_proud) < 1e-3, (pad_cover, pad_margin, pad_proud)
+        disk = centre.buffer(r_bumpon, quad_segs=32)
+        pocket_gauge["floor_cover"].append(round(disk.intersection(mat_6i["floor"]).area / disk.area, 4))
+        pocket_gauge["floor_1mm_cover"].append(round(disk.intersection(mat_6i["floor_1mm"]).area / disk.area, 4))
+        pocket_gauge["pocket_intrusion_mm2"].append(round(
+            disk.intersection(mat_6i["in_pocket"]).area + disk.intersection(mat_6i["face"]).area, 4))
+        around = centre.buffer(r_pocket + 5.0)
+        void = around.difference(mat_6i["face"]).difference(centre.buffer(r_pocket + 0.05))
+        pocket_gauge["wall_mm"].append(round(void.distance(centre) - r_pocket, 3))
+        pocket_gauge["proud_of_desk_mm2"].append(round(around.intersection(mat_6i["past_desk"]).area, 4))
+    assert min(pocket_gauge["floor_cover"]) > 0.999 and min(pocket_gauge["floor_1mm_cover"]) > 0.999, pocket_gauge
+    assert max(pocket_gauge["pocket_intrusion_mm2"]) < 1e-3 and max(pocket_gauge["proud_of_desk_mm2"]) < 1e-3, pocket_gauge
+    assert min(pocket_gauge["wall_mm"]) >= 1.0, pocket_gauge
+    pocket_gauge["bumpon_protrusion_mm"] = [round(pads["bumpon_height"] - pads["pocket_depth"], 3)]
 
     verification = {
         "status": "ALL_PASSED",
@@ -524,7 +538,7 @@ def main() -> None:
         "short_side_steps_2p85_4p90_5p66": side_steps_ok,
         "chirality_usb_notch_x_and_back_pocket_centres": {"usb_notch_x": usb_notch_x,
                                                           "back_outer_pocket_abs_x": {k: round(v, 2) for k, v in back_outer.items()}},
-        "bumpon_pads_d8p4": {"cover": pad_cover, "edge_margin_mm": pad_margin, "proud_of_desk_mm2": pad_proud},
+        "bumpon_pockets_sj5012": pocket_gauge,
         "strike_tongue_to_plate_gap_mm": tongue_plate_gap,
         "virtual_hardware_mating_mm3": {
             "dwg_6095_gas_pc_plate_seated": round(plate_seated_ov, 5),

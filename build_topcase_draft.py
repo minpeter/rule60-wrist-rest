@@ -210,17 +210,29 @@ INNER_SKIRT_R = 2.00    # Inner skirt (bottom-case pocket) vertical corner radiu
                         # case ~2.3 mm off its seat at the corners (owner, printed part): its corners are about
                         # R5.0 - 2.3 = R2.7, so the pocket takes R2.0 to clear them with the straight walls line-to-line.
 RIB = 2.40              # Honeycomb rib width (matches v9)
-# Bumpon pads: 8 flat sites on the wrist-rest underside for 3M Bumpon SJ5302 (Ø7.9 x 2.2 mm, +-0.5 mm), which fill the
-# gap the stock bottom-case feet leave under the wrist rest. Each pad runs `PAD_D` in from the front face (front row) or
-# the junction wall (back row): full height for `PAD_COLUMN_D`, then a 45-deg corbel that prints without support.
-# v7.4 stopped at the 6 mm column, so a centred bumpon hung ~1 mm past the front face.
-BUMPON_D = 7.9          # 3M SJ5302 diameter (2.2 mm high)
-BUMPON_D_MAX = 8.4      # Diameter at the +0.5 mm datasheet tolerance
+# Bumpon pads: 8 sites on the wrist-rest underside, each with a pocket for a 3M Bumpon SJ5012 (flat-top cylinder,
+# Ø12.7 x 3.5 mm, +-0.5 mm). The bumpons fill the gap the stock bottom-case feet leave under the wrist rest; the pocket
+# sets how far they stand proud of the pad face (`DESK_GAP`) and holds them against sideways shear. Each pad runs
+# `PAD_D` in from the front face (front row) or the junction wall (back row): full height near the wall, then a 45-deg
+# corbel that prints without support. v7.4 had 6 mm deep flat pads, v7.5 11 mm deep flat pads for the Ø7.9 SJ5302.
+BUMPON_D = 12.7         # 3M SJ5012 diameter (datasheet nominal)
+BUMPON_D_MAX = 13.2     # Diameter at the +0.5 mm datasheet tolerance
+BUMPON_H = 3.5          # 3M SJ5012 height (datasheet nominal)
+DESK_GAP = 2.0          # Pad face to desk with the keyboard on its stock feet: estimated from the v9 wrist rest, 22 mm
+                        # installed to match the keyboard front edge, against the 20.01 mm case height; not measured
+POCKET_DEPTH = round(BUMPON_H - DESK_GAP, 3)  # Pocket depth along the desk-plane normal (1.50 mm)
+POCKET_D = round(BUMPON_D_MAX + 0.4, 3)       # Pocket diameter (13.60 mm): 0.2 mm per side at the largest bumpon
 PAD_X = (30.0, 119.0)   # Pad centres, |X| (print frame)
-PAD_W = 14.0            # Pad width (X)
-PAD_D = 11.0            # Pad depth (Y) from the outer face: a centred BUMPON_D_MAX bumpon keeps 1.3 mm to each edge
-PAD_COLUMN_D = 6.0      # Full-height part of the pad, wall included
-PAD_TIP_T = 1.0         # Vertical land at the pad's inner edge, under the pad face
+PAD_W = 16.0            # Pad width (X): 1.2 mm wall each side of the pocket
+PAD_D = 16.0            # Pad depth (Y) from the outer face: 1.2 mm wall each side of the pocket
+PAD_COLUMN_D = 6.0      # Full-height part of the pad at least, wall included
+PAD_TIP_T = round(POCKET_DEPTH + 1.0, 3)      # Vertical land at the pad's inner edge, under the pad face
+
+
+def pad_centres() -> list[tuple[float, float]]:
+    """Print-frame X, Y of the 8 bumpon pad centres: front row, then back row."""
+    return [(s * c, y) for y in (PAD_D / 2, WRIST_D - PAD_D / 2) for c in PAD_X for s in (-1.0, 1.0)]
+
 
 USB_X = pw(19.35, 0.0)[0]  # USB-C centre: plate X 19.35 (stock back-left, Esc side) -> print X +123.60
 # Width and corner shape from the stock notch measured against the v6.2 print (owner photos IMG_0378/0379, scaled from
@@ -683,15 +695,19 @@ def build_solidcraft_commands() -> list[dict[str, Any]]:
         },
     ])
 
-    # Pad undercuts: past `PAD_COLUMN_D` each pad becomes a 45-deg corbel ending in a `PAD_TIP_T` vertical land, so it
-    # prints without support. Only cuts: the pad face stays the step-3 desk plane and the pad sides the hollow notch,
-    # and the cut reaches 1 mm into the empty bay past the pad's sides and inner edge (no coincident faces).
+    # Pad undercuts: each pad's underside rises at 45 deg to a `PAD_TIP_T` vertical land at its inner edge, so it prints
+    # without support; the pad stays full height where that slope meets the skin, at least `PAD_COLUMN_D` from the wall.
+    # Only cuts: the pad face stays the step-3 desk plane and the pad sides the hollow notch, and the cut reaches 1 mm
+    # into the empty bay past the pad's sides and inner edge (no coincident faces).
     undercuts = []
     for y_col, y_tip, sign in ((PAD_COLUMN_D, PAD_D, 1.0), (WRIST_D - PAD_COLUMN_D, WRIST_D - PAD_D, -1.0)):
         z_tip = z_desk_in_print_frame(y_tip) - PAD_TIP_T  # underside at the pad's inner edge
         y_out = y_tip + sign
-        undercuts.append(sg.Polygon([(y_col, SKIN_T), (y_out, SKIN_T), (y_out, round(z_tip + 1.0, 4)),
-                                     (y_col, round(z_tip - abs(y_tip - y_col), 4))]))
+        below_slope = sg.Polygon([(y_out, z_tip + 1.0), (y_tip - sign * 100.0, z_tip - 100.0), (y_out, z_tip - 100.0)])
+        band = sg.box(min(y_col, y_out), SKIN_T, max(y_col, y_out), z_tip + 1.0)
+        cut = band.intersection(below_slope)
+        assert cut.geom_type == "Polygon" and cut.area > 1.0, (y_tip, cut)
+        undercuts.append(sg.Polygon([(round(y, 4), round(z, 4)) for y, z in cut.exterior.coords[:-1]]))
     for i, x0 in enumerate(sorted(s * c - PAD_W / 2 for c in PAD_X for s in (-1.0, 1.0))):
         cmds.extend([
             {"command": "sketch.create", "params": {"plane": "YZ", "offset": str(x0 - 1.0), "name": f"PadUndercutSk{i}"}},
@@ -709,6 +725,28 @@ def build_solidcraft_commands() -> list[dict[str, Any]]:
                 },
             },
         ])
+
+    # Bumpon pockets: one sketch on the desk plane (x along X, v up the 6-deg slope, normal out of the pad faces), a
+    # 72-gon circumscribing `POCKET_D` centred on each pad, cut `POCKET_DEPTH` into the pad and 1 mm out past its face.
+    # Flat facets keep the two halves exact mirrors; a true circle is faceted differently in each exported half.
+    cos_t, sin_t = math.cos(TILT_RAD), math.sin(TILT_RAD)
+    r_poly = POCKET_D / 2 / math.cos(math.pi / 72)
+    cmds.append({"command": "sketch.create", "params": {
+        "plane": {"origin": [0.0, 0.0, z_desk_in_print_frame(0.0)], "x_dir": [1.0, 0.0, 0.0], "y_dir": [0.0, cos_t, sin_t]},
+        "name": "BumponPocketSk"}})
+    for x, y in pad_centres():
+        v = y / cos_t
+        pts = [[round(x + r_poly * math.cos(2 * math.pi * k / 72), 4), round(v + r_poly * math.sin(2 * math.pi * k / 72), 4)]
+               for k in range(72)]
+        cmds.append({"command": "sketch.line", "params": {"points": [*pts, pts[0]]}})
+    cmds.extend([
+        {"command": "sketch.finish", "params": {}},
+        {
+            "command": "solid.extrude",
+            "params": {"sketch": "BumponPocketSk", "distance": POCKET_DEPTH, "direction": "negative", "distance2": 1.0,
+                       "operation": "cut", "targets": ["Unibody"], "name": "BumponPockets"},
+        },
+    ])
 
     # 13. Symmetric Honeycomb Lattice Cutout through Wrist-Rest Top Skin (Z_p = 0 .. skin_t)
     hex_r = round(4.5 - RIB / math.sqrt(3), 4)
@@ -1156,7 +1194,7 @@ def main() -> None:
     )
 
     report = {
-        "version": "v7.5-bumpon-pads-11mm",
+        "version": "v7.6-sj5012-pockets",
         "generator": "SolidCraft v0.22.0 parametric timeline + 28px/mm gasket metrology",
         "solidcraft_design": str(design_path.relative_to(Path(__file__).resolve().parent)),
         "step_export": str(step_path.relative_to(Path(__file__).resolve().parent)),
@@ -1220,14 +1258,18 @@ def main() -> None:
             "dovetails": [{"name": n, "yc": yc, "proj": proj, "z_stop": z_stop, "z_top": z_top}
                           for n, yc, _, _, proj, z_stop, z_top, *_ in JOINTS_SPEC],
             "bumpon_pads": {
-                "bumpon": "3M Bumpon SJ5302",
+                "bumpon": "3M Bumpon SJ5012",
                 "bumpon_diameter": BUMPON_D,
                 "bumpon_diameter_max": BUMPON_D_MAX,
+                "bumpon_height": BUMPON_H,
+                "desk_gap": DESK_GAP,
+                "pocket_d": POCKET_D,
+                "pocket_depth": POCKET_DEPTH,
                 "pad_w": PAD_W,
                 "pad_d": PAD_D,
                 "column_d": PAD_COLUMN_D,
                 "tip_land": PAD_TIP_T,
-                "centres_world": [[s * c, y] for y in (PAD_D / 2, WRIST_D - PAD_D / 2) for c in PAD_X for s in (-1.0, 1.0)],
+                "centres_world": [list(p) for p in pad_centres()],
                 "desk_plane_zp_at_y0": z_desk_in_print_frame(0.0),
                 "desk_plane_tilt_deg": TILT_DEG,
             },
